@@ -33,6 +33,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -86,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'clinica_veterinaria',
         'USER': 'postgres',
-        'PASSWORD': '5154839',
+        'PASSWORD': '123456',
         'HOST': 'localhost',
         'PORT': '5432',
 

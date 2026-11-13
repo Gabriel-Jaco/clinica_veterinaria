@@ -18,11 +18,13 @@ from django.contrib import admin
 from django.urls import include, path
 from app.views import *
 from django.contrib.auth import views as auth_views
+from django.views.generic import RedirectView   
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index.html', IndexView.as_view(), name="index"),
-    path('cliente.html', ClienteView.as_view(), name="cliente"),
+    path('index/', IndexView.as_view(), name="index"),
+    path('cliente/', ClienteView.as_view(), name="cliente"),
+    path('', RedirectView.as_view(pattern_name='login'), name='home'),
 
     path("login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
