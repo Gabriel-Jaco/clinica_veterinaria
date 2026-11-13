@@ -2,16 +2,103 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport">
-        <title>Página principal</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Painel Principal - Clínica Veterinária</title>
+        <style>
+            :root {
+                --primary-color: #0d9488; /* Verde-água profissional */
+                --primary-hover: #0f766e;
+                --danger-color: #e11d48;
+                --danger-hover: #be123c;
+                --bg-color: #f0fdf4; /* Tom levemente esverdeado e suave */
+                --card-bg: #ffffff;
+                --text-color: #1f2937;
+            }
 
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            .dashboard-card {
+                background: var(--card-bg);
+                padding: 2.5rem;
+                border-radius: 1rem;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+                width: 100%;
+                max-width: 450px;
+                text-align: center;
+                border-top: 5px solid var(--primary-color);
+            }
+
+            h1 {
+                margin-top: 0;
+                color: var(--text-color);
+                font-size: 1.75rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .menu-links {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            a.btn-link, button[type="submit"] {
+                display: block;
+                width: 100%;
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                font-size: 1rem;
+                font-weight: 600;
+                text-decoration: none;
+                cursor: pointer;
+                border: none;
+                transition: background-color 0.2s, transform 0.1s;
+                box-sizing: border-box;
+            }
+
+            a.btn-link {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+            a.btn-link:hover {
+                background-color: var(--primary-hover);
+            }
+
+            button[type="submit"] {
+                background-color: var(--danger-color);
+                color: white;
+            }
+
+            button[type="submit"]:hover {
+                background-color: var(--danger-hover);
+            }
+        </style>
     </head>
     <body>
-        <h1>Seja bem vindo!</h1>
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Sair</button>
-        </form>
-        <a href="cliente.html">clientes</a>
+        <div class="dashboard-card">
+            <h1>🐾 Seja bem-vindo(a)!</h1>
+            
+            <div class="menu-links">
+                <a class="btn-link" href="{% url 'cliente' %}">Gerenciar Clientes / Pets</a>
+                <a class="btn-link" href="{% url 'cadastro_funcionario' %}">Cadastrar Funcionário</a>
+                <a class="btn-link" href="{% url 'funcionario' %}">Listar Funcionários</a>
+            </div>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Sair do Sistema</button>
+            </form>
+        </div>
     </body>
 </html>

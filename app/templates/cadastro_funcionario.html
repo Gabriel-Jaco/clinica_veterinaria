@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastrar Funcionário - Clínica Veterinária</title>
+        <style>
+            :root {
+                --primary-color: #0d9488; /* Verde-água profissional */
+                --primary-hover: #0f766e;
+                --bg-color: #f0fdf4; /* Tom levemente esverdeado e suave */
+                --card-bg: #ffffff;
+                --text-color: #1f2937;
+                --border-color: #d1d5db;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                margin: 0;
+                padding: 2rem 1rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                box-sizing: border-box;
+            }
+
+            .form-card {
+                background: var(--card-bg);
+                padding: 2.5rem;
+                border-radius: 1rem;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+                width: 100%;
+                max-width: 600px;
+                border-top: 5px solid var(--primary-color);
+                box-sizing: border-box;
+            }
+
+            .header-form {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+                border-bottom: 2px solid #f3f4f6;
+                padding-bottom: 1rem;
+            }
+
+            h1 {
+                margin: 0;
+                color: var(--text-color);
+                font-size: 1.5rem;
+            }
+
+            /* Botão Voltar elegante */
+            a.btn-voltar {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                background-color: white;
+                color: var(--primary-color);
+                border: 2px solid var(--primary-color);
+                padding: 0.4rem 0.8rem;
+                border-radius: 0.5rem;
+                font-size: 0.85rem;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.2s ease;
+            }
+
+            a.btn-voltar:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+            /* Estilização para os campos gerados pelo {{ form.as_p }} do Django */
+            form p {
+                margin-bottom: 1.25rem;
+            }
+
+            form label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 0.35rem;
+                color: var(--text-color);
+                font-size: 0.9rem;
+            }
+
+            form input, form select, form textarea {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid var(--border-color);
+                border-radius: 0.5rem;
+                font-size: 1rem;
+                box-sizing: border-box;
+                transition: border-color 0.2s, box-shadow 0.2s;
+                font-family: inherit;
+                background-color: #fff;
+            }
+
+            form input:focus, form select:focus, form textarea:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+            }
+
+            .errorlist {
+                color: #e11d48;
+                font-size: 0.85rem;
+                padding-left: 0;
+                list-style: none;
+                margin: 0.25rem 0 0 0;
+            }
+
+            button[type="submit"] {
+                display: block;
+                width: 100%;
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                border: none;
+                background-color: var(--primary-color);
+                color: white;
+                transition: background-color 0.2s, transform 0.1s;
+                box-sizing: border-box;
+                margin-top: 1.5rem;
+            }
+
+            button[type="submit"]:hover {
+                background-color: var(--primary-hover);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="form-card">
+            <div class="header-form">
+                <h1>🐾 Cadastrar Funcionário</h1>
+                <a class="btn-voltar" href="{% url 'index' %}">← Voltar</a>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Salvar Cadastro</button>
+            </form>
+        </div>
+    </body>
+</html>

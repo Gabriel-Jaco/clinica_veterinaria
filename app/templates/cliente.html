@@ -2,12 +2,159 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport">
-        <title>Página clientes</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lista de Clientes - Clínica Veterinária</title>
+        <style>
+            :root {
+                --primary-color: #0d9488; /* Verde-água profissional */
+                --primary-hover: #0f766e;
+                --bg-color: #f0fdf4; /* Tom levemente esverdeado e suave */
+                --card-bg: #ffffff;
+                --text-color: #1f2937;
+                --border-color: #e5e7eb;
+            }
 
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                margin: 0;
+                padding: 2rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-height: 100vh;
+                box-sizing: border-box;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 1200px;
+            }
+
+            .header-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 2rem;
+            }
+
+            h1 {
+                color: var(--text-color);
+                font-size: 2rem;
+                margin: 0;
+            }
+
+            /* Botão Voltar elegante */
+            a.btn-voltar {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                background-color: white;
+                color: var(--primary-color);
+                border: 2px solid var(--primary-color);
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.2s ease;
+            }
+
+            a.btn-voltar:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+            /* Card da Tabela */
+            .table-card {
+                background: var(--card-bg);
+                border-radius: 1rem;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+                overflow: hidden;
+                border-top: 5px solid var(--primary-color);
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            table.table {
+                width: 100%;
+                border-collapse: collapse;
+                text-align: left;
+                white-space: nowrap;
+            }
+
+            table.table th {
+                background-color: #f8fafc;
+                color: #475569;
+                font-weight: 600;
+                padding: 1rem 1.25rem;
+                font-size: 0.9rem;
+                border-bottom: 2px solid var(--border-color);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            table.table td {
+                padding: 1rem 1.25rem;
+                color: var(--text-color);
+                border-bottom: 1px solid var(--border-color);
+                font-size: 0.95rem;
+            }
+
+            table.table tbody tr {
+                transition: background-color 0.15s ease;
+            }
+
+            table.table tbody tr:hover {
+                background-color: #f0fdf4; /* Destaque leve ao passar o mouse na linha */
+            }
+
+            table.table tbody tr:last-child td {
+                border-bottom: none;
+            }
+        </style>
     </head>
     <body>
-        <h1>Seja bem vindo!</h1>
-        <a href="index.html">voltar</a>
+        <div class="container">
+            <div class="header-nav">
+                <h1>🐾 Lista de Clientes</h1>
+                <a class="btn-voltar" href="{% url 'index' %}">← Voltar ao Início</a>
+            </div>
+
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Sobrenome</th>
+                                <th>CPF</th>
+                                <th>Contato</th>
+                                <th>Data de Nascimento</th>
+                                <th>Gênero</th>
+                                <th>Endereço</th> 
+                                <th>Cidade</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for cliente in clientes %}
+                            <tr>
+                                <td><strong>{{ cliente.nome }}</strong></td>
+                                <td>{{ cliente.sobrenome }}</td>
+                                <td>{{ cliente.cpf }}</td>
+                                <td>{{ cliente.contato }}</td>
+                                <td>{{ cliente.data_nascimento }}</td>
+                                <td>{{ cliente.genero }}</td>
+                                <td>{{ cliente.endereco }}</td>
+                                <td>{{ cliente.endereco.cidade }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

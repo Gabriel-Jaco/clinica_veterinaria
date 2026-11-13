@@ -31,8 +31,9 @@ class Cliente(models.Model):
     cpf = models.CharField(max_length = 14, verbose_name="CPF do cliente com . . -")
     contato = models.CharField(max_length = 20,verbose_name = "Número de contato do cliente")
     data_nascimento = models.DateField(verbose_name= "data de nascimento do cliente")
+    genero = models.CharField(max_length=20, default='nenhum', verbose_name="genero do cliente (opcional)")
     endereco = models.ForeignKey(Endereco, on_delete = models.CASCADE, verbose_name="endereço do cliente")
-
+   
     class Meta: 
         verbose_name = "Cliente"
         verbose_name_plural = "Clientes"
@@ -136,32 +137,26 @@ class Servico(models.Model):
         return self.nome
 
 class Funcionario(models.Model):
-    nome = models.CharField(max_length = 20, verbose_name="Nome do funcionario")
-    sobrenome = models.CharField(max_length = 100, verbose_name="Sobrenome do funcionario")
-    cpf = models.CharField(max_length = 14, verbose_name="CPF do funcionario com . . -")
-    contato = models.CharField(max_length = 20,verbose_name = "Número de contato do funcionario")
-    email = models.CharField(max_length=100, verbose_name="Email de acesso do funcionário" )
-    data_nascimento = models.DateField(verbose_name= "data de nascimento do funcionario")
-    endereco = models.ForeignKey(Endereco, on_delete = models.CASCADE, verbose_name="endereço do funcionario")
-    funcao = models.TextField(verbose_name="Breve descrição da funcionalidade do funcionário")
+    nome = models.CharField(max_length=20, verbose_name="Nome")
+    sobrenome = models.CharField(max_length=100, verbose_name="Sobrenome")
+    cpf = models.CharField(max_length=14, verbose_name="CPF")
+    contato = models.CharField(max_length=20, verbose_name="Contato")
+    email = models.EmailField(max_length=100, verbose_name="E-mail")
 
-    usuario = models.OneToOneField(
-            settings.AUTH_USER_MODEL,
-            on_delete=models.CASCADE,
-            null=True,
-            blank=True,
-        )
-    ##vanilda_123
+    data_nascimento = models.DateField(verbose_name="Data de nascimento")
+
+    endereco = models.ForeignKey(Endereco,on_delete=models.CASCADE,verbose_name="Endereço")
+
+    usuario = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True)
+    
+    descricao = models.TextField(verbose_name="Descrição da função")
 
     class Meta:
-        verbose_name = "Funcionario"
-        verbose_name_plural = "Funcionarios"
+        verbose_name = "Funcionário"
+        verbose_name_plural = "Funcionários"
 
     def __str__(self):
         return self.nome
-
-from django.conf import settings
-from django.db import models
 
 # class Funcionario(models.Model):
 #     # ... seus campos atuais ...

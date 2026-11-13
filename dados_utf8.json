@@ -1,0 +1,352 @@
+[
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Farmacia",
+    "permissions": [
+      [
+        "add_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "change_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "delete_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "view_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "add_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "change_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "delete_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "view_permission",
+        "auth",
+        "permission"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Recepcionista",
+    "permissions": [
+      [
+        "add_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "change_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "delete_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "view_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "change_atendimento",
+        "app",
+        "atendimento"
+      ],
+      [
+        "delete_atendimento",
+        "app",
+        "atendimento"
+      ],
+      [
+        "change_especie",
+        "app",
+        "especie"
+      ],
+      [
+        "delete_especie",
+        "app",
+        "especie"
+      ],
+      [
+        "change_fatura",
+        "app",
+        "fatura"
+      ],
+      [
+        "delete_fatura",
+        "app",
+        "fatura"
+      ],
+      [
+        "add_fornecedor",
+        "app",
+        "fornecedor"
+      ],
+      [
+        "change_fornecedor",
+        "app",
+        "fornecedor"
+      ],
+      [
+        "delete_fornecedor",
+        "app",
+        "fornecedor"
+      ],
+      [
+        "add_funcionario",
+        "app",
+        "funcionario"
+      ],
+      [
+        "change_funcionario",
+        "app",
+        "funcionario"
+      ],
+      [
+        "delete_funcionario",
+        "app",
+        "funcionario"
+      ],
+      [
+        "add_lote",
+        "app",
+        "lote"
+      ],
+      [
+        "change_lote",
+        "app",
+        "lote"
+      ],
+      [
+        "delete_lote",
+        "app",
+        "lote"
+      ],
+      [
+        "add_produto",
+        "app",
+        "produto"
+      ],
+      [
+        "change_produto",
+        "app",
+        "produto"
+      ],
+      [
+        "delete_produto",
+        "app",
+        "produto"
+      ],
+      [
+        "add_produto_atendimento",
+        "app",
+        "produto_atendimento"
+      ],
+      [
+        "change_produto_atendimento",
+        "app",
+        "produto_atendimento"
+      ],
+      [
+        "delete_produto_atendimento",
+        "app",
+        "produto_atendimento"
+      ],
+      [
+        "change_raca",
+        "app",
+        "raca"
+      ],
+      [
+        "delete_raca",
+        "app",
+        "raca"
+      ],
+      [
+        "add_servico",
+        "app",
+        "servico"
+      ],
+      [
+        "change_servico",
+        "app",
+        "servico"
+      ],
+      [
+        "delete_servico",
+        "app",
+        "servico"
+      ],
+      [
+        "add_group",
+        "auth",
+        "group"
+      ],
+      [
+        "change_group",
+        "auth",
+        "group"
+      ],
+      [
+        "delete_group",
+        "auth",
+        "group"
+      ],
+      [
+        "add_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "change_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "delete_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "add_user",
+        "auth",
+        "user"
+      ],
+      [
+        "change_user",
+        "auth",
+        "user"
+      ],
+      [
+        "delete_user",
+        "auth",
+        "user"
+      ],
+      [
+        "add_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "change_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "delete_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "add_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "change_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "delete_session",
+        "sessions",
+        "session"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$4BVJivgbVcVNN19td6p2vB$BvJpcUwwsT1q43gnBFrAvruCF87lRaYXaj7qIyj7kXg=",
+    "last_login": "2026-11-13T15:03:00.957Z",
+    "is_superuser": true,
+    "username": "gab",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-13T14:44:14.281Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$9beVkuEVxeMLrZ9hZcCAs0$Uw/j0akGebFRwIVDGgw4HKAKRz4fJ7EExnWEpxkBHTA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "Ana",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-13T14:59:40.573Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "app.cidade",
+  "pk": 1,
+  "fields": {
+    "cidade": "Nova Resende",
+    "uf": "MG"
+  }
+},
+{
+  "model": "app.endereco",
+  "pk": 1,
+  "fields": {
+    "rua": "Vitório Jacob",
+    "numero": 99,
+    "bairro": "Centro",
+    "cidade": 1
+  }
+},
+{
+  "model": "app.funcionario",
+  "pk": 1,
+  "fields": {
+    "nome": "Ana",
+    "sobrenome": "banana",
+    "cpf": "123.456.789-12",
+    "contato": "35999999999",
+    "email": "ana@gmail.com",
+    "data_nascimento": "2002-04-12",
+    "endereco": 1,
+    "funcao": "recepcionista",
+    "usuario": [
+      "Ana"
+    ]
+  }
+}
+]
