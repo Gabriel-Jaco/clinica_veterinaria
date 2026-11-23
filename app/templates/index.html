@@ -91,7 +91,8 @@
             
             <div class="menu-links">
                 <a class="btn-link" href="{% url 'cliente' %}">Gerenciar Clientes / Pets</a>
-                <a class="btn-link" href="{% url 'cadastro_funcionario' %}">Cadastrar Funcionário</a>
+
+
                 <a class="btn-link" href="{% url 'funcionario' %}">Listar Funcionários</a>
             </div>
 
@@ -100,5 +101,13 @@
                 <button type="submit">Sair do Sistema</button>
             </form>
         </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
     </body>
 </html>

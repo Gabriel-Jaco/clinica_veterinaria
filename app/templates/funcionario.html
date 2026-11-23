@@ -120,7 +120,18 @@
         <div class="container">
             <div class="header-nav">
                 <h1>🐾 Lista de Funcionários</h1>
-                <a class="btn-voltar" href="{% url 'index' %}">← Voltar ao Início</a>
+
+                <div style="display: flex; gap: 1rem;">
+                    {% if perms.app.add_funcionario %}
+                        <a class="btn-voltar" href="{% url 'cadastro_funcionario' %}">
+                            + Cadastrar Funcionário
+                        </a>
+                    {% endif %}
+
+                    <a class="btn-voltar" href="{% url 'index' %}">
+                        ← Voltar ao Início
+                    </a>
+                </div>
             </div>
 
             <div class="table-card">
@@ -136,6 +147,11 @@
                                 <th>Data de Nascimento</th>
                                 <th>Endereço</th>
                                 <th>Função / Descrição</th> 
+                                {% if perms.app.change_funcionario or perms.app.delete_funcionario %}
+                                    <th>Ações</th>
+                                {% endif %}
+
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -149,6 +165,27 @@
                                 <td>{{ funcionario.data_nascimento }}</td>
                                 <td>{{ funcionario.endereco }}</td>
                                 <td>{{ funcionario.descricao }}</td>
+                                {% if perms.app.change_funcionario or perms.app.delete_funcionario %}
+                                    <td>
+                                        {% if perms.app.change_funcionario %}
+                                            <a href="{% url 'editar_funcionario' funcionario.pk %}">
+                                                Editar
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.app.delete_funcionario %}
+                                            <form method="post"
+                                                action="{% url 'excluir_funcionario' funcionario.pk %}"
+                                                style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        onclick="return confirm('Deseja realmente excluir este funcionário?')">
+                                                    Excluir
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -156,5 +193,14 @@
                 </div>
             </div>
         </div>
+        <p>
+            Permissão de cadastro:
+            {{ perms.app.add_funcionario }}
+        </p>
+
+        <p>
+            Permissão de visualização:
+            {{ perms.app.view_funcionario }}
+        </p>
     </body>
 </html>

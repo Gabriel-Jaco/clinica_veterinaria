@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'clinica_veterinaria',
         'USER': 'postgres',
-        'PASSWORD': '123456',
+        'PASSWORD': '5154839',
         'HOST': 'localhost',
         'PORT': '5432',
 

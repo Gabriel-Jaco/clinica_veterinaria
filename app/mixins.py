@@ -1,10 +1,12 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib import messages
+from django.shortcuts import redirect
 
-class GrupoRequeridoMixin(LoginRequiredMixin, UserPassesTestMixin):
-    grupos_permitidos = []
+class PermissaoComRedirecionamentoMixin(LoginRequiredMixin, PermissionRequiredMixin):
 
-    def test_func(self):
-        user = self.request.user
-        if user.is_superuser:
-            return True
-        return user.groups.filter(name__in=self.grupos_permitidos).exists()
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            messages.error(self.request, "Ação não permitida!")
+            return redirect('index')
+
+        return super().handle_no_permission()
