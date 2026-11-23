@@ -90,10 +90,10 @@
             <h1>🐾 Seja bem-vindo(a)!</h1>
             
             <div class="menu-links">
-                <a class="btn-link" href="{% url 'cliente' %}">Gerenciar Clientes / Pets</a>
+                <a class="btn-link" href="{% url 'cliente' %}">Clientes</a>
 
 
-                <a class="btn-link" href="{% url 'funcionario' %}">Listar Funcionários</a>
+                <a class="btn-link" href="{% url 'funcionario' %}">Funcionários</a>
             </div>
 
             <form method="post" action="{% url 'logout' %}">
@@ -102,12 +102,12 @@
             </form>
         </div>
 
-        {% if messages %}
+        <!-- {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-warning" role="alert">
                     {{ message }}
                 </div>
             {% endfor %}
-        {% endif %}
+        {% endif %} -->
     </body>
 </html>

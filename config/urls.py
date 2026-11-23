@@ -23,20 +23,22 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', IndexView.as_view(), name="index"),
-    path('cliente/', ClienteView.as_view(), name="cliente"),
     path('', RedirectView.as_view(pattern_name='login'), name='home'),
     path("login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     
-    path('funcionario/cadastrar/', FuncionarioCreateView.as_view(), name='cadastro_funcionario'),
+    #path('teste-permissao/', TestePermissaoView.as_view()),
+
+
     path('funcionario/', FuncionarioView.as_view(), name='funcionario'),
-
-    path('teste-permissao/', TestePermissaoView.as_view()),
-
+    path('funcionario/cadastrar/', FuncionarioCreateView.as_view(), name='cadastro_funcionario'),
     path('funcionario/editar/<int:pk>/',FuncionarioEditView.as_view(),name='editar_funcionario'),
-
     path('funcionario/excluir/<int:pk>/',FuncionarioDeleteView.as_view(),name='excluir_funcionario'),
     
+    path('cliente/', ClienteView.as_view(), name="cliente"),
+    path('cliente/cadastrar/', ClienteCreateView.as_view(), name='cadastro_cliente'),
+    path('cliente/editar/<int:pk>/', ClienteEditView.as_view(), name='editar_cliente'),
+    path('cliente/excluir/<int:pk>/', ClienteDeleteView.as_view(), name='excluir_cliente'),
 
     
 ]

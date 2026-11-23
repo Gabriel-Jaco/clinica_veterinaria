@@ -7,10 +7,14 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
+
 from django import forms
+from .forms import ClienteForm
+
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from .models import Funcionario
+
 
 from .mixins import PermissaoComRedirecionamentoMixin
 
@@ -44,6 +48,16 @@ class FuncionarioFormFront(forms.ModelForm):
             self.add_error("password2", "As senhas não coincidem.")
         return cleaned_data
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            endereco = self.instance.endereco
+
+            self.fields['rua'].initial = endereco.rua
+            self.fields['numero'].initial = endereco.numero
+            self.fields['bairro'].initial = endereco.bairro
+            self.fields['cidade'].initial = endereco.cidade
 
 class FuncionarioEditForm(FuncionarioFormFront):
     password1 = forms.CharField(
@@ -226,14 +240,92 @@ class FuncionarioView(PermissaoComRedirecionamentoMixin, View):
         pass
 
 
-class TestePermissaoView(LoginRequiredMixin, View):
+
+class ClienteCreateView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.add_cliente'
+
     def get(self, request):
-        print("USUÁRIO:", request.user)
-        print("AUTENTICADO:", request.user.is_authenticated)
-        print("GRUPOS:", request.user.groups.all())
-        print("VER FUNCIONÁRIO:", request.user.has_perm('app.view_funcionario'))
-        print("CADASTRAR FUNCIONÁRIO:", request.user.has_perm('app.add_funcionario'))
+        form = ClienteForm()
+        return render(request, "cadastro_cliente.html", {"form": form})
 
-        return redirect('index')
-    
+    def post(self, request):
+        form = ClienteForm(request.POST)
 
+        if form.is_valid():
+            with transaction.atomic():
+                dados = form.cleaned_data
+
+                endereco = Endereco.objects.create(
+                    rua=dados['rua'],
+                    numero=dados['numero'],
+                    bairro=dados['bairro'],
+                    cidade=dados['cidade']
+                )
+
+                cliente = form.save(commit=False)
+                cliente.endereco = endereco
+                cliente.save()
+
+            messages.success(request, "Cliente cadastrado com sucesso!")
+            return redirect("cliente")
+
+        return render(request, "cadastro_cliente.html", {"form": form})
+
+
+class ClienteEditView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.change_cliente'
+
+    def get(self, request, pk):
+        cliente = get_object_or_404(Cliente, pk=pk)
+        form = ClienteForm(instance=cliente)
+
+        return render(request, "editar_cliente.html", {
+            "form": form,
+            "cliente": cliente
+        })
+
+    def post(self, request, pk):
+        cliente = get_object_or_404(Cliente, pk=pk)
+        form = ClienteForm(request.POST, instance=cliente)
+
+        if form.is_valid():
+            with transaction.atomic():
+                dados = form.cleaned_data
+
+                endereco = Endereco.objects.create(
+                    rua=dados['rua'],
+                    numero=dados['numero'],
+                    bairro=dados['bairro'],
+                    cidade=dados['cidade']
+                )
+
+                cliente = form.save(commit=False)
+                cliente.endereco = endereco
+                cliente.save()
+
+            messages.success(request, "Cliente atualizado com sucesso!")
+            return redirect("cliente")
+
+        return render(request, "editar_cliente.html", {
+            "form": form,
+            "cliente": cliente
+        })
+
+
+class ClienteDeleteView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.delete_cliente'
+
+    def get(self, request, pk):
+        cliente = get_object_or_404(Cliente, pk=pk)
+
+        return render(request, "excluir_cliente.html", {
+            "cliente": cliente
+        })
+
+    def post(self, request, pk):
+        cliente = get_object_or_404(Cliente, pk=pk)
+
+        cliente.delete()
+
+        messages.success(request, "Cliente excluído com sucesso!")
+        return redirect("cliente")

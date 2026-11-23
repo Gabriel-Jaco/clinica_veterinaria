@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Cliente</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0fdf4;
+            color: #1f2937;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            border-top: 5px solid #0d9488;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.7rem;
+            margin-top: 0.4rem;
+            margin-bottom: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+        }
+
+        button, .voltar {
+            padding: 0.7rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button {
+            background: #0d9488;
+            color: white;
+            border: none;
+        }
+
+        .voltar {
+            color: #0d9488;
+            border: 1px solid #0d9488;
+            margin-left: 0.5rem;
+        }
+
+        button:hover {
+            background: #0f766e;
+        }
+
+        .erro {
+            color: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🐾 Cadastrar Cliente</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">Cadastrar Cliente</button>
+
+            <a class="voltar" href="{% url 'cliente' %}">
+                Cancelar
+            </a>
+        </form>
+    </div>
+</body>
+</html>
