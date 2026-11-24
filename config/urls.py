@@ -34,7 +34,16 @@ urlpatterns = [
     path('funcionario/cadastrar/', FuncionarioCreateView.as_view(), name='cadastro_funcionario'),
     path('funcionario/editar/<int:pk>/',FuncionarioEditView.as_view(),name='editar_funcionario'),
     path('funcionario/excluir/<int:pk>/',FuncionarioDeleteView.as_view(),name='excluir_funcionario'),
-    
+
+    path('animal/', AnimalView.as_view(), name='animal'),
+    path('animal/cadastrar/', AnimalCreateView.as_view(), name='cadastro_animal'),
+    path('animal/editar/<int:pk>/', AnimalEditView.as_view(), name='editar_animal'),
+    path('animal/excluir/<int:pk>/', AnimalDeleteView.as_view(), name='excluir_animal'),
+
+    path('raca/', RacaView.as_view(), name='raca'),
+    path('raca/cadastrar/', RacaCreateView.as_view(), name='cadastro_raca'),
+    path('raca/excluir/<int:pk>/', RacaDeleteView.as_view(), name='excluir_raca'),
+        
     path('cliente/', ClienteView.as_view(), name="cliente"),
     path('cliente/cadastrar/', ClienteCreateView.as_view(), name='cadastro_cliente'),
     path('cliente/editar/<int:pk>/', ClienteEditView.as_view(), name='editar_cliente'),

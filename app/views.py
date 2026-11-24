@@ -7,10 +7,8 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
-
 from django import forms
-from .forms import ClienteForm
-
+from .forms import *
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from .models import Funcionario
@@ -189,13 +187,20 @@ class FuncionarioEditView(PermissaoComRedirecionamentoMixin, View):
         })
 
 
+
 class FuncionarioDeleteView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.delete_funcionario'
+
+    def get(self, request, pk):
+        funcionario = get_object_or_404(Funcionario, pk=pk)
+
+        return render(request, "excluir_funcionario.html", {
+            "funcionario": funcionario
+        })
 
     def post(self, request, pk):
         funcionario = get_object_or_404(Funcionario, pk=pk)
 
-        # Evita excluir funcionários que possuem atendimentos.
         if Atendimento.objects.filter(funcionario=funcionario).exists():
             messages.error(
                 request,
@@ -212,7 +217,8 @@ class FuncionarioDeleteView(PermissaoComRedirecionamentoMixin, View):
 
         messages.success(request, "Funcionário excluído com sucesso!")
         return redirect("funcionario")
-    
+
+
 class IndexView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, "index.html")
@@ -329,3 +335,162 @@ class ClienteDeleteView(PermissaoComRedirecionamentoMixin, View):
 
         messages.success(request, "Cliente excluído com sucesso!")
         return redirect("cliente")
+
+
+class AnimalView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.view_animal'
+
+    def get(self, request):
+        animais = Animal.objects.select_related(
+            'raca__especie',
+            'tutor'
+        ).all()
+
+        return render(request, 'animal.html', {
+            'animais': animais
+        })
+
+
+class AnimalCreateView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.add_animal'
+
+    def get(self, request):
+        form = AnimalForm()
+        return render(request, 'cadastro_animal.html', {
+            'form': form
+        })
+
+    def post(self, request):
+        form = AnimalForm(request.POST)
+
+        if form.is_valid():
+            with transaction.atomic():
+                form.save()
+
+            messages.success(request, 'Animal cadastrado com sucesso!')
+            return redirect('animal')
+
+        return render(request, 'cadastro_animal.html', {
+            'form': form
+        })
+
+class AnimalEditView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.change_animal'
+
+    def get(self, request, pk):
+        animal = get_object_or_404(Animal, pk=pk)
+        form = AnimalForm(instance=animal)
+
+        return render(request, 'editar_animal.html', {
+            'form': form,
+            'animal': animal
+        })
+
+    def post(self, request, pk):
+        animal = get_object_or_404(Animal, pk=pk)
+        form = AnimalForm(request.POST, instance=animal)
+
+        if form.is_valid():
+            with transaction.atomic():
+                form.save()
+
+            messages.success(request, 'Animal atualizado com sucesso!')
+            return redirect('animal')
+
+        return render(request, 'editar_animal.html', {
+            'form': form,
+            'animal': animal
+        })
+
+class AnimalDeleteView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.delete_animal'
+
+    def get(self, request, pk):
+        animal = get_object_or_404(Animal, pk=pk)
+
+        return render(request, 'excluir_animal.html', {'animal': animal})
+
+    def post(self, request, pk):
+        animal = get_object_or_404(Animal, pk=pk)
+        animal.delete()
+
+        messages.success(request, "Animal excluído com sucesso!")
+
+        return redirect('animal')
+
+
+class RacaCreateView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.add_raca'
+
+    def get(self, request):
+        form = RacaForm()
+
+        return render(request, 'cadastro_raca.html', {
+            'form': form
+        })
+
+    def post(self, request):
+        form = RacaForm(request.POST)
+
+        if form.is_valid():
+            with transaction.atomic():
+                form.save()
+
+            messages.success(request, "Raça cadastrada com sucesso!")
+            return redirect('animal')
+
+        return render(request, 'cadastro_raca.html', {
+            'form': form
+        })
+
+
+
+class RacaDeleteView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.delete_raca'
+
+    def get(self, request, pk):
+        raca = get_object_or_404(Raca, pk=pk)
+
+        return render(request, 'excluir_raca.html', {
+            'raca': raca
+        })
+
+    def post(self, request, pk):
+        raca = get_object_or_404(Raca, pk=pk)
+
+        if Animal.objects.filter(raca=raca).exists():
+            messages.error(
+                request,
+                "Não é possível excluir esta raça, pois existem animais vinculados a ela."
+            )
+            return redirect('animal')
+
+        raca.delete()
+
+        messages.success(request, "Raça excluída com sucesso!")
+
+        return redirect('animal')
+
+class RacaView(PermissaoComRedirecionamentoMixin, View):
+    permission_required = 'app.view_raca'
+
+    def get(self, request):
+        racas = Raca.objects.select_related('especie').all()
+
+        return render(request, 'raca.html', {
+            'racas': racas
+        })
+
+# class AnimalView(PermissaoComRedirecionamentoMixin, View):
+#     permission_required = 'app.view_animal'
+
+#     def get(self, request):
+#         animais = Animal.objects.select_related(
+#             'raca__especie',
+#             'tutor'
+#         ).all()
+
+#         return render(request, 'animal.html', {
+#             'animais': animais
+#         })
+    

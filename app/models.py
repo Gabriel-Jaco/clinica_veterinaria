@@ -61,7 +61,7 @@ class Raca(models.Model):
         verbose_name_plural = "Racas"
 
     def __str__(self):
-        return self.nome
+        return f"{self.nome}, {self.especie.nome}"
 
 
 class Animal(models.Model):
@@ -172,7 +172,7 @@ class Atendimento(models.Model):
     status = models.CharField(max_length = 20, verbose_name="status do atendimento")
     observacao = models.TextField(blank=True, null=True, verbose_name="observação")
     valor_servico = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="valor da taxa")
-    valor_materiais = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="alor dos materiais")
+    valor_materiais = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="valor dos materiais")
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="valor total")
 
     servico = models.ForeignKey(Servico, on_delete = models.CASCADE, verbose_name="serviço do atendimento")

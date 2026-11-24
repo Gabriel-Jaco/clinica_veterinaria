@@ -174,15 +174,9 @@
                                         {% endif %}
 
                                         {% if perms.app.delete_funcionario %}
-                                            <form method="post"
-                                                action="{% url 'excluir_funcionario' funcionario.pk %}"
-                                                style="display: inline;">
-                                                {% csrf_token %}
-                                                <button type="submit"
-                                                        onclick="return confirm('Deseja realmente excluir este funcionário?')">
-                                                    Excluir
-                                                </button>
-                                            </form>
+                                            <a href="{% url 'excluir_funcionario' funcionario.pk %}">
+                                                Excluir
+                                            </a>
                                         {% endif %}
                                     </td>
                                 {% endif %}
