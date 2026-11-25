@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excluir Lote</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0fdf4;
+            color: #1f2937;
+            padding: 2rem;
+            margin: 0;
+        }
+
+        .container { max-width: 600px; margin: auto; }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            border-top: 5px solid #dc2626;
+            box-shadow: 0 2px 8px #00000010;
+        }
+
+        .botoes { display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap; }
+
+        .btn {
+            padding: 11px 18px;
+            border-radius: 6px;
+            border: 1px solid #0d9488;
+            background: #0d9488;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn:hover { background: #0f766e; }
+
+        .btn-excluir { background: #dc2626; border-color: #dc2626; }
+
+        .btn-excluir:hover { background: #b91c1c; }
+
+        h1 { margin-top: 0; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="card">
+            <h1>Excluir Lote</h1>
+
+            <p>Tem certeza de que deseja excluir o lote abaixo?</p>
+
+            <p><strong>Número:</strong> {{ lote.numero }}</p>
+            <p><strong>Produto:</strong> {{ lote.produto.nome }}</p>
+            <p><strong>Fornecedor:</strong> {{ lote.fornecedor.nome }}</p>
+            <p><strong>Quantidade:</strong> {{ lote.quantidade }}</p>
+
+            <p>
+                Atenção: não será possível excluir um lote que já tenha sido utilizado em um atendimento.
+            </p>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="botoes">
+                    <button type="submit" class="btn btn-excluir">Confirmar exclusão</button>
+                    <a href="{% url 'lote' %}" class="btn">Cancelar</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

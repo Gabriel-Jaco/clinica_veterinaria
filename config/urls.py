@@ -50,4 +50,43 @@ urlpatterns = [
     path('cliente/excluir/<int:pk>/', ClienteDeleteView.as_view(), name='excluir_cliente'),
 
     
+    path('fornecedor/', FornecedorView.as_view(), name='fornecedor'),
+    path('fornecedor/cadastrar/', FornecedorCreateView.as_view(), name='cadastro_fornecedor'),
+    path('fornecedor/editar/<int:pk>/', FornecedorEditView.as_view(), name='editar_fornecedor'),
+    path('fornecedor/excluir/<int:pk>/', FornecedorDeleteView.as_view(), name='excluir_fornecedor'),
+
+    # PRODUTOS
+    path('produto/', ProdutoView.as_view(), name='produto'),
+    path('produto/cadastrar/', ProdutoCreateView.as_view(), name='cadastro_produto'),
+    path('produto/visualizar/<int:pk>/', ProdutoDetailView.as_view(), name='visualizar_produto'),
+    path('produto/editar/<int:pk>/', ProdutoEditView.as_view(), name='editar_produto'),
+    path('produto/excluir/<int:pk>/', ProdutoDeleteView.as_view(), name='excluir_produto'),
+
+    # LOTES
+    path('lote/', LoteView.as_view(), name='lote'),
+    path('lote/cadastrar/', LoteCreateView.as_view(), name='cadastro_lote'),
+    path('lote/visualizar/<int:pk>/', LoteDetailView.as_view(), name='visualizar_lote'),
+    path('lote/editar/<int:pk>/', LoteEditView.as_view(), name='editar_lote'),
+    path('lote/excluir/<int:pk>/', LoteDeleteView.as_view(), name='excluir_lote'),
+
+    path('atendimento/', AtendimentoView.as_view(), name='atendimento'),
+    path('atendimento/novo/', AtendimentoCreateView.as_view(), name='atendimento_cadastro'),
+    path('atendimento/<int:pk>/', AtendimentoDetailView.as_view(), name='atendimento_detalhe'),
+    path('atendimento/<int:pk>/editar/', AtendimentoEditView.as_view(), name='atendimento_editar'),
+    path('atendimento/<int:pk>/cancelar/', AtendimentoCancelView.as_view(), name='atendimento_cancelar'),
+
+    path('servico/', ServicoView.as_view(), name='servico'),
+    path('servico/novo/', ServicoCreateView.as_view(), name='servico_cadastro'),
+    path('servico/<int:pk>/editar/', ServicoEditView.as_view(), name='servico_editar'),
+    path('servico/<int:pk>/excluir/', ServicoDeleteView.as_view(), name='servico_excluir'),
+
+
+    path('fatura/', FaturaView.as_view(), name='fatura'),
+    path('fatura/nova/', FaturaCreateView.as_view(), name='fatura_cadastro'),
+    path('fatura/<int:pk>/', FaturaDetailView.as_view(), name='fatura_detalhe'),
+    path('fatura/<int:pk>/excluir/', FaturaDeleteView.as_view(), name='fatura_excluir'),
+    path('fatura/<int:pk>/pagar/', PagamentoCreateView.as_view(), name='pagamento_cadastro'),
+    path('pagamento/<int:pk>/estornar/', PagamentoEstornarView.as_view(), name='pagamento_estornar'),
+
+    
 ]

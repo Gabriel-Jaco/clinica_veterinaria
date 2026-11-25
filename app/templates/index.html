@@ -89,15 +89,28 @@
         <div class="dashboard-card">
             <h1>🐾 Seja bem-vindo(a)!</h1>
             
+        
             <div class="menu-links">
                 <a class="btn-link" href="{% url 'cliente' %}">Clientes</a>
 
                 <a class="btn-link" href="{% url 'animal' %}">Animais</a>
 
-                <a class="btn-link" href="{% url 'funcionario' %}">Funcionários</a>
+                <a class="btn-link" href="{% url 'atendimento' %}">Atendimentos</a>
 
-        
+                <a class="btn-link" href="{% url 'funcionario' %}">Funcionários</a>
+                
+                <a class="btn-link" href="{% url 'servico' %}">Serviços</a>
+
+                <a class="btn-link" href="{% url 'fornecedor' %}">Fornecedores</a>
+
+                <a class="btn-link" href="{% url 'produto' %}">Produtos</a>
+
+                <a class="btn-link" href="{% url 'lote' %}">Lotes</a>
+
+                <a class="btn-link" href="{% url 'fatura' %}">Faturas</a>
+
             </div>
+
 
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}

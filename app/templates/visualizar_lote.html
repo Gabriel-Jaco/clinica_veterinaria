@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Lote</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0fdf4;
+            color: #1f2937;
+            padding: 2rem;
+            margin: 0;
+        }
+
+        .container { max-width: 800px; margin: auto; }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            border-top: 5px solid #0d9488;
+            box-shadow: 0 2px 8px #00000010;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info p { margin: 5px 0; }
+
+        .botoes { display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap; }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid #0d9488;
+            color: white;
+            background: #0d9488;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .btn:hover { background: #0f766e; }
+
+        .btn-voltar { background: white; color: #0d9488; }
+
+        .btn-voltar:hover { color: white; }
+
+        h1 { margin-top: 0; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header-nav">
+            <h1>Detalhes do Lote</h1>
+            <a href="{% url 'lote' %}" class="btn btn-voltar">Voltar</a>
+        </div>
+
+        <div class="card">
+
+            <div class="info">
+                <div>
+                    <p><strong>Número do lote:</strong></p>
+                    <p>{{ lote.numero }}</p>
+                </div>
+
+                <div>
+                    <p><strong>Produto:</strong></p>
+                    <p>{{ lote.produto.nome }}</p>
+                </div>
+
+                <div>
+                    <p><strong>Fornecedor:</strong></p>
+                    <p>{{ lote.fornecedor.nome }}</p>
+                </div>
+
+                <div>
+                    <p><strong>Data de validade:</strong></p>
+                    <p>{{ lote.data_validade|date:"d/m/Y" }}</p>
+                </div>
+
+                <div>
+                    <p><strong>Quantidade:</strong></p>
+                    <p>{{ lote.quantidade }}</p>
+                </div>
+            </div>
+
+            <div class="botoes">
+                <a href="{% url 'editar_lote' lote.pk %}" class="btn">Editar lote</a>
+                <a href="{% url 'excluir_lote' lote.pk %}" class="btn">Excluir lote</a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

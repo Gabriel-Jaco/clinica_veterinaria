@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotes</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0fdf4;
+            color: #1f2937;
+            padding: 2rem;
+            margin: 0;
+        }
+
+        .container { max-width: 1200px; margin: auto; }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .botoes { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid #0d9488;
+            color: white;
+            background: #0d9488;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .btn:hover { background: #0f766e; }
+
+        .btn-voltar { background: white; color: #0d9488; }
+
+        .btn-voltar:hover { color: white; }
+
+        .table-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-top: 5px solid #0d9488;
+            box-shadow: 0 2px 8px #00000010;
+        }
+
+        .table-responsive { overflow-x: auto; }
+
+        table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th { background: #f9fafb; text-transform: uppercase; font-size: 12px; }
+
+        tr:hover { background: #f0fdf4; }
+
+        .acoes { display: flex; gap: 12px; }
+
+        .acoes a { color: #0d9488; font-weight: 600; text-decoration: none; }
+
+        .mensagem {
+            padding: 12px;
+            background: #d1fae5;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .vazio { text-align: center; padding: 25px; color: #6b7280; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header-nav">
+            <h1>Lotes</h1>
+
+            <div class="botoes">
+                <a href="{% url 'index' %}" class="btn btn-voltar">Voltar</a>
+                <a href="{% url 'produto' %}" class="btn btn-voltar">Produtos</a>
+                <a href="{% url 'cadastro_lote' %}" class="btn">Cadastrar lote</a>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mensagem">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="table-card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Produto</th>
+                            <th>Fornecedor</th>
+                            <th>Data de validade</th>
+                            <th>Quantidade</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for lote in lotes %}
+                            <tr>
+                                <td>{{ lote.numero }}</td>
+                                <td>{{ lote.produto.nome }}</td>
+                                <td>{{ lote.fornecedor.nome }}</td>
+                                <td>{{ lote.data_validade|date:"d/m/Y" }}</td>
+                                <td>{{ lote.quantidade }}</td>
+
+                                <td>
+                                    <div class="acoes">
+                                        <a href="{% url 'visualizar_lote' lote.pk %}">Visualizar</a>
+                                        <a href="{% url 'editar_lote' lote.pk %}">Editar</a>
+                                        <a href="{% url 'excluir_lote' lote.pk %}">Excluir</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="vazio">
+                                    Nenhum lote cadastrado.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

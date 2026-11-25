@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Serviços</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+        h1 { margin: 0; font-size: 22px; }
+        .topo { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
+        .btn-sec { background: #6b7280; }
+        .btn-perigo { background: #dc2626; }
+        .btn-pequeno { padding: 4px 10px; font-size: 13px; }
+        .messages { list-style: none; padding: 0; margin: 0 0 16px; }
+        .messages li { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; background: #e0f2fe; }
+        .messages .success { background: #dcfce7; }
+        .messages .error { background: #fee2e2; }
+        .tabela-scroll { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th, td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+        th { background: #f9fafb; }
+        td.valor, th.valor { text-align: right; }
+        .vazio { text-align: center; color: #6b7280; padding: 24px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="topo">
+        <h1>Serviços</h1>
+        <div>
+            <a class="btn btn-sec" href="{% url 'index' %}">Início</a>
+            <a class="btn" href="{% url 'servico_cadastro' %}">Novo serviço</a>
+        </div>
+    </div>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="tabela-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th class="valor">Valor</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in servicos %}
+                <tr>
+                    <td>{{ s.nome }}</td>
+                    <td class="valor">R$ {{ s.valor|floatformat:2 }}</td>
+                    <td>
+                        <a class="btn btn-pequeno btn-sec" href="{% url 'servico_editar' s.pk %}">Editar</a>
+                        <a class="btn btn-pequeno btn-perigo" href="{% url 'servico_excluir' s.pk %}">Excluir</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="vazio">Nenhum serviço cadastrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

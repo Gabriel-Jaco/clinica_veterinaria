@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+
+    <style>
+        :root {
+            --primary-color: #0d9488;
+            --primary-hover: #0f766e;
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding: 2rem;
+            margin: 0;
+        }
+
+        .container { max-width: 1200px; margin: auto; }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        h1 { margin: 0; }
+
+        .botoes { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        a, button {
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--primary-color);
+            color: white;
+            background: var(--primary-color);
+            display: inline-block;
+        }
+
+        .btn:hover { background: var(--primary-hover); }
+
+        .btn-voltar {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .btn-voltar:hover { color: white; }
+
+        .table-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-top: 5px solid var(--primary-color);
+            box-shadow: 0 2px 8px #00000010;
+        }
+
+        .table-responsive { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: #f9fafb;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        tr:hover { background: var(--bg-color); }
+
+        .acoes { display: flex; gap: 12px; }
+
+        .acoes a { color: var(--primary-color); font-weight: 600; }
+
+        .mensagem {
+            padding: 12px;
+            background: #d1fae5;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .vazio { text-align: center; padding: 25px; color: #6b7280; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header-nav">
+            <h1>Produtos</h1>
+
+            <div class="botoes">
+                <a href="{% url 'index' %}" class="btn btn-voltar">Voltar</a>
+                <a href="{% url 'lote' %}" class="btn btn-voltar">Lotes</a>
+                <a href="{% url 'cadastro_produto' %}" class="btn">Cadastrar produto</a>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mensagem">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="table-card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Preço de custo</th>
+                            <th>Preço de venda</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for produto in produtos %}
+                            <tr>
+                                <td>{{ produto.nome }}</td>
+                                <td>R$ {{ produto.preco_custo }}</td>
+                                <td>R$ {{ produto.preco_venda }}</td>
+                                <td>{{ produto.estoque }}</td>
+
+                                <td>
+                                    <div class="acoes">
+                                        <a href="{% url 'visualizar_produto' produto.pk %}">Visualizar</a>
+                                        <a href="{% url 'editar_produto' produto.pk %}">Editar</a>
+                                        <a href="{% url 'excluir_produto' produto.pk %}">Excluir</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="vazio">
+                                    Nenhum produto cadastrado.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

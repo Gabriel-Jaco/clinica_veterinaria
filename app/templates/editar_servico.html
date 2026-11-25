@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editar serviço</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
+        .container { max-width: 520px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+        h1 { margin-top: 0; font-size: 22px; }
+        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
+        .btn-sec { background: #6b7280; }
+        .acoes { margin-top: 24px; display: flex; gap: 8px; }
+        .aviso { background: #fef3c7; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; }
+        .campo { margin-bottom: 14px; }
+        .campo label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+        .campo input, .campo select, .campo textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; font-family: inherit; }
+        .erro, .errorlist { color: #b91c1c; font-size: 13px; list-style: none; padding: 0; margin: 4px 0 0; }
+        .erros-gerais { background: #fee2e2; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; }
+        .erros-gerais .errorlist { margin: 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Editar serviço</h1>
+
+    <div class="aviso">
+        Alterar o valor vale apenas para novos atendimentos. Os atendimentos já cadastrados mantêm o valor que tinham.
+    </div>
+
+    <form method="post" action="{% url 'servico_editar' servico.pk %}">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="erros-gerais">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        {% for field in form %}
+        <div class="campo">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for erro in field.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
+        </div>
+        {% endfor %}
+
+        <div class="acoes">
+            <button type="submit" class="btn">Salvar alterações</button>
+            <a class="btn btn-sec" href="{% url 'servico' %}">Voltar</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
