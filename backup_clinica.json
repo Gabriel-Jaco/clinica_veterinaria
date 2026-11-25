@@ -1,0 +1,1087 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-11-23T22:24:49.401Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "Canino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-11-23T22:24:56.193Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "Felino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-11-23T22:25:03.431Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "Equino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-11-23T22:25:09.063Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "4",
+    "object_repr": "Bovino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-11-23T22:25:15.604Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "5",
+    "object_repr": "Caprino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-11-23T22:25:48.351Z",
+    "user": 5,
+    "content_type": 19,
+    "object_id": "1",
+    "object_repr": "SRD",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2026-11-23T22:26:03.337Z",
+    "user": 5,
+    "content_type": 19,
+    "object_id": "2",
+    "object_repr": "SRD",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2026-11-23T22:26:20.087Z",
+    "user": 5,
+    "content_type": 19,
+    "object_id": "3",
+    "object_repr": "Pastor Alemão",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2026-11-24T20:36:19.569Z",
+    "user": 5,
+    "content_type": 10,
+    "object_id": "1",
+    "object_repr": "Heloisa",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2026-11-24T20:36:33.977Z",
+    "user": 5,
+    "content_type": 11,
+    "object_id": "4",
+    "object_repr": "Avenida João Dell Vale, Morro Preto",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2026-11-24T20:36:33.977Z",
+    "user": 5,
+    "content_type": 11,
+    "object_id": "3",
+    "object_repr": "Rua naguyeba, naguelandia",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2026-11-24T20:36:33.977Z",
+    "user": 5,
+    "content_type": 11,
+    "object_id": "2",
+    "object_repr": "Avenida José Bachião da Prata, Nossa Senhora de fátima",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2026-11-24T20:36:33.977Z",
+    "user": 5,
+    "content_type": 11,
+    "object_id": "1",
+    "object_repr": "Vitório Jacob, Centro",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2026-11-24T20:36:39.912Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "5",
+    "object_repr": "Caprino",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2026-11-24T20:36:39.912Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "4",
+    "object_repr": "Bovino",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2026-11-24T20:36:39.912Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "Equino",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2026-11-24T20:36:39.912Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "Felino",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2026-11-24T20:36:39.912Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "Canino",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2026-11-24T20:37:18.580Z",
+    "user": 5,
+    "content_type": 2,
+    "object_id": "5",
+    "object_repr": "Farmacia",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2026-11-24T20:37:35.798Z",
+    "user": 5,
+    "content_type": 2,
+    "object_id": "6",
+    "object_repr": "Recepcionista",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2026-11-24T20:39:03.317Z",
+    "user": 5,
+    "content_type": 11,
+    "object_id": "5",
+    "object_repr": "Avenida José Bachião da Prata, Nossa Senhora de Fátima",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2026-11-24T20:39:40.328Z",
+    "user": 5,
+    "content_type": 15,
+    "object_id": "4",
+    "object_repr": "Gabriel",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2026-11-24T20:41:20.265Z",
+    "user": 5,
+    "content_type": 9,
+    "object_id": "2",
+    "object_repr": "Muzambinho, MG",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2026-11-24T20:41:34.185Z",
+    "user": 5,
+    "content_type": 9,
+    "object_id": "3",
+    "object_repr": "Guaxupé, MG",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2026-11-24T20:42:36.640Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "6",
+    "object_repr": "F",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2026-11-24T20:42:42.553Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "6",
+    "object_repr": "Felino",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Refere-se ao nome dos adjetivos que cada grupo recebe\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2026-11-24T20:42:48.072Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "7",
+    "object_repr": "Canino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2026-11-24T20:42:52.745Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "8",
+    "object_repr": "Equino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2026-11-24T20:42:59.032Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "9",
+    "object_repr": "Caprino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2026-11-24T20:43:06.858Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "10",
+    "object_repr": "Bovino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2026-11-24T20:43:13.038Z",
+    "user": 5,
+    "content_type": 12,
+    "object_id": "11",
+    "object_repr": "Ovino",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2026-11-25T01:31:17.473Z",
+    "user": 5,
+    "content_type": 2,
+    "object_id": "7",
+    "object_repr": "Veterinario",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2026-11-25T01:31:27.293Z",
+    "user": 5,
+    "content_type": 2,
+    "object_id": "6",
+    "object_repr": "Recepcionista",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2026-11-25T01:31:30.048Z",
+    "user": 5,
+    "content_type": 2,
+    "object_id": "7",
+    "object_repr": "Veterinario",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2026-11-25T01:34:16.502Z",
+    "user": 5,
+    "content_type": 2,
+    "object_id": "6",
+    "object_repr": "Recepcionista",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 5,
+  "fields": {
+    "name": "Farmacia",
+    "permissions": [
+      1,
+      2,
+      3,
+      4,
+      25,
+      26,
+      27,
+      28,
+      49,
+      50,
+      51,
+      52,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      53,
+      54,
+      55,
+      56,
+      37,
+      38,
+      39,
+      40,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      81,
+      82,
+      83,
+      84,
+      41,
+      42,
+      43,
+      44,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      45,
+      46,
+      47,
+      48,
+      9,
+      10,
+      11,
+      12,
+      5,
+      6,
+      7,
+      8,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 6,
+  "fields": {
+    "name": "Recepcionista",
+    "permissions": [
+      25,
+      26,
+      27,
+      28,
+      49,
+      52,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      53,
+      54,
+      55,
+      56,
+      37,
+      38,
+      39,
+      40,
+      57,
+      60,
+      64,
+      68,
+      72,
+      81,
+      82,
+      83,
+      84,
+      44,
+      73,
+      76,
+      77,
+      78,
+      79,
+      80,
+      45,
+      46,
+      47,
+      48
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 7,
+  "fields": {
+    "name": "Veterinario",
+    "permissions": [
+      28,
+      49,
+      52,
+      32,
+      36,
+      56,
+      37,
+      40,
+      60,
+      64,
+      68,
+      72,
+      84,
+      44,
+      73,
+      76,
+      77,
+      78,
+      79,
+      80,
+      48
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$RJbUuR9DJ54xJHTOh2ILhG$IIqXqtQ+Jr18Cm8G5dzw6Cy7lDIeLVO3GiOd7lhcESE=",
+    "last_login": "2026-11-25T01:32:40.252Z",
+    "is_superuser": true,
+    "username": "gab",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-13T14:44:14.281Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$IdaXOsFsWpdak767iBWct3$hl0Yl0tQ3GDO70LfQBaN27I09+hqBlSQzEZZSeGnMAE=",
+    "last_login": "2026-11-23T01:42:32.320Z",
+    "is_superuser": false,
+    "username": "Ana",
+    "first_name": "",
+    "last_name": "",
+    "email": "ana@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-13T14:59:40.573Z",
+    "groups": [
+      6
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$jP5ZmgVJxL0GPdecg0GKup$LOxpVQ9GIQCRnfXMm0I5ziDBPhkMYXw/juXlQF891s8=",
+    "last_login": "2026-11-24T20:25:45.209Z",
+    "is_superuser": false,
+    "username": "Gabriel",
+    "first_name": "",
+    "last_name": "",
+    "email": "gabriel@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-22T23:53:32.701Z",
+    "groups": [
+      5
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$YqZ7B7gdzzLKZhAMIJSLlG$FxeVu78HYjt2NXpPt0noXBsV3CSLyxFIn59643qcGTw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "Nague",
+    "first_name": "",
+    "last_name": "",
+    "email": "nague@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-23T00:15:04.740Z",
+    "groups": [
+      5
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$BOFap2CrP9wsemzGmpAGXC$aKjUpu/UZri7VK1D3jPuS6aNuyrA3J5hauk5y69PIkg=",
+    "last_login": "2026-11-25T01:16:30.770Z",
+    "is_superuser": false,
+    "username": "Gab",
+    "first_name": "",
+    "last_name": "",
+    "email": "gabriel@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-24T20:39:40.076Z",
+    "groups": [
+      5
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$nCzsoHWlTQG3Xc1FlbZRRU$yfcHD8y/Tjc9cpTXdYnWtycyOaDhZNX2xwKCYi7LClA=",
+    "last_login": "2026-11-25T01:34:27.621Z",
+    "is_superuser": false,
+    "username": "Anapaula",
+    "first_name": "",
+    "last_name": "",
+    "email": "ana@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-24T20:46:44.233Z",
+    "groups": [
+      6
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "6b9b72tgk0eyncsx1czbqtpriu2k66v3",
+  "fields": {
+    "session_data": ".eJxVjEEKwyAQAP-y5yJrVKw59t43yLqrNW0xEJNT6N9LIIf2OjPMDpG2tcat5yVOAiNohMsvTMSv3A4jT2qPWfHc1mVK6kjUabu6z5Lft7P9G1TqFUbgIXvylgKTZNYoZmAuBr0rzKIFQ5HgtHM-ZDaaJJirNc54RJuKRfh8AS4KOFU:1xW1tz:mKzc1NPVYL7ZZGgn830Q75MtGuaE7kOvVa_LHWQggus",
+    "expire_date": "2026-12-09T01:34:27.622Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "fn1afxnwc6r1a8zg8a7ch0u8ir5xtgr7",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQAP-yZ0OgwFJ69O4byAJbqRpISnsy_t006UGvM5N5Q6B9K2HvvIYlwwQOLr8sUnpyPUR-UL03kVrd1iWKIxGn7eLWMr-uZ_s3KNQLTDCYKNHNGjWarDMSR0_Sjc4Qsk5WWmUJ0Zp59KST8sliZsVkKQ5REXy-0RU3zQ:1xVcv1:bQrgrT2mu_O7epP1DCyn36opGqf5b68VyqIsSiziul0",
+    "expire_date": "2026-12-07T22:53:51.878Z"
+  }
+},
+{
+  "model": "app.cidade",
+  "pk": 1,
+  "fields": {
+    "cidade": "Nova Resende",
+    "uf": "MG"
+  }
+},
+{
+  "model": "app.cidade",
+  "pk": 2,
+  "fields": {
+    "cidade": "Muzambinho",
+    "uf": "MG"
+  }
+},
+{
+  "model": "app.cidade",
+  "pk": 3,
+  "fields": {
+    "cidade": "Guaxupé",
+    "uf": "MG"
+  }
+},
+{
+  "model": "app.endereco",
+  "pk": 5,
+  "fields": {
+    "rua": "Avenida José Bachião da Prata",
+    "numero": 88,
+    "bairro": "Nossa Senhora de Fátima",
+    "cidade": 1
+  }
+},
+{
+  "model": "app.endereco",
+  "pk": 6,
+  "fields": {
+    "rua": "Avenida João Dell Vale",
+    "numero": 98,
+    "bairro": "Centro",
+    "cidade": 1
+  }
+},
+{
+  "model": "app.endereco",
+  "pk": 7,
+  "fields": {
+    "rua": "Avenida João Dell Vale",
+    "numero": 67,
+    "bairro": "Maria das Dores",
+    "cidade": 3
+  }
+},
+{
+  "model": "app.endereco",
+  "pk": 8,
+  "fields": {
+    "rua": "Rua São Paulo",
+    "numero": 99,
+    "bairro": "Brejo Alegre",
+    "cidade": 2
+  }
+},
+{
+  "model": "app.cliente",
+  "pk": 2,
+  "fields": {
+    "nome": "Heloisa",
+    "sobrenome": "Amanda",
+    "cpf": "111.222.333.44",
+    "contato": "35999999",
+    "data_nascimento": "2000-06-23",
+    "genero": "Feminino",
+    "endereco": 6
+  }
+},
+{
+  "model": "app.especie",
+  "pk": 6,
+  "fields": {
+    "nome": "Felino"
+  }
+},
+{
+  "model": "app.especie",
+  "pk": 7,
+  "fields": {
+    "nome": "Canino"
+  }
+},
+{
+  "model": "app.especie",
+  "pk": 8,
+  "fields": {
+    "nome": "Equino"
+  }
+},
+{
+  "model": "app.especie",
+  "pk": 9,
+  "fields": {
+    "nome": "Caprino"
+  }
+},
+{
+  "model": "app.especie",
+  "pk": 10,
+  "fields": {
+    "nome": "Bovino"
+  }
+},
+{
+  "model": "app.especie",
+  "pk": 11,
+  "fields": {
+    "nome": "Ovino"
+  }
+},
+{
+  "model": "app.raca",
+  "pk": 7,
+  "fields": {
+    "nome": "SRD",
+    "especie": 6
+  }
+},
+{
+  "model": "app.raca",
+  "pk": 8,
+  "fields": {
+    "nome": "SRD",
+    "especie": 7
+  }
+},
+{
+  "model": "app.animal",
+  "pk": 2,
+  "fields": {
+    "nome": "Lia",
+    "sobrenome": "Amanda",
+    "rg": "4545",
+    "data_nasc": "2020-03-20",
+    "peso": 8.5,
+    "raca": 8,
+    "tutor": 2
+  }
+},
+{
+  "model": "app.fornecedor",
+  "pk": 1,
+  "fields": {
+    "nome": "Ativa Vet",
+    "cnpj": "147258369987",
+    "contato": "3595989898",
+    "email": "ativavet@gmail.com",
+    "endereco": 8
+  }
+},
+{
+  "model": "app.produto",
+  "pk": 1,
+  "fields": {
+    "nome": "agulha roxa",
+    "unidade": "un",
+    "preco_custo": "5.00",
+    "preco_venda": "10.00",
+    "estoque": 985.0
+  }
+},
+{
+  "model": "app.lote",
+  "pk": 1,
+  "fields": {
+    "numero": "1",
+    "data_validade": "2027-10-20",
+    "quantidade": 985.0,
+    "fornecedor": 1,
+    "produto": 1
+  }
+},
+{
+  "model": "app.servico",
+  "pk": 1,
+  "fields": {
+    "nome": "Consulta canino",
+    "valor": "100.00"
+  }
+},
+{
+  "model": "app.servico",
+  "pk": 2,
+  "fields": {
+    "nome": "taxa de esterelização",
+    "valor": "500.00"
+  }
+},
+{
+  "model": "app.funcionario",
+  "pk": 4,
+  "fields": {
+    "nome": "Gabriel",
+    "sobrenome": "Jacó",
+    "cpf": "169.949.556-48",
+    "contato": "35999389822",
+    "email": "gabriel@gmail.com",
+    "data_nascimento": "2007-04-26",
+    "endereco": 5,
+    "usuario": 9,
+    "descricao": "Estagiário farmácia"
+  }
+},
+{
+  "model": "app.funcionario",
+  "pk": 5,
+  "fields": {
+    "nome": "Ana",
+    "sobrenome": "Paula",
+    "cpf": "147.258.369-98",
+    "contato": "9965548798",
+    "email": "ana@gmail.com",
+    "data_nascimento": "2005-08-12",
+    "endereco": 7,
+    "usuario": 10,
+    "descricao": "Recepcionista principal"
+  }
+},
+{
+  "model": "app.atendimento",
+  "pk": 1,
+  "fields": {
+    "data": "2026-11-24",
+    "status": "cancelado",
+    "observacao": "",
+    "valor_servico": "0.00",
+    "valor_materiais": "150.00",
+    "valor_total": "150.00",
+    "servico": 1,
+    "animal": 2,
+    "funcionario": 5,
+    "fatura": null
+  }
+},
+{
+  "model": "app.atendimento",
+  "pk": 2,
+  "fields": {
+    "data": "2026-11-24",
+    "status": "concluido",
+    "observacao": "",
+    "valor_servico": "100.00",
+    "valor_materiais": "150.00",
+    "valor_total": "250.00",
+    "servico": 1,
+    "animal": 2,
+    "funcionario": 5,
+    "fatura": 1
+  }
+},
+{
+  "model": "app.atendimento",
+  "pk": 3,
+  "fields": {
+    "data": "2026-11-24",
+    "status": "concluido",
+    "observacao": "",
+    "valor_servico": "500.00",
+    "valor_materiais": "0.00",
+    "valor_total": "500.00",
+    "servico": 2,
+    "animal": 2,
+    "funcionario": 5,
+    "fatura": 1
+  }
+},
+{
+  "model": "app.produto_atendimento",
+  "pk": 1,
+  "fields": {
+    "quantidade": 15.0,
+    "preco_custo": "5.00",
+    "preco_venda": "10.00",
+    "subtotal": "150.00",
+    "produto": 1,
+    "lote": 1,
+    "atendimento": 1
+  }
+},
+{
+  "model": "app.produto_atendimento",
+  "pk": 2,
+  "fields": {
+    "quantidade": 15.0,
+    "preco_custo": "5.00",
+    "preco_venda": "10.00",
+    "subtotal": "150.00",
+    "produto": 1,
+    "lote": 1,
+    "atendimento": 2
+  }
+},
+{
+  "model": "app.fatura",
+  "pk": 1,
+  "fields": {
+    "data_emissao": "2026-11-24",
+    "valor_final": "750.00",
+    "cliente": 2
+  }
+},
+{
+  "model": "app.pagamento",
+  "pk": 1,
+  "fields": {
+    "fatura": 1,
+    "funcionario": 4,
+    "valor": "750.00",
+    "forma": "dinheiro",
+    "data_pagamento": "2026-11-25T01:21:47.197Z",
+    "estornado": false
+  }
+}
+]
