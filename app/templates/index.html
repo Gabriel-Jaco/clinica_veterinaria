@@ -1,129 +1,625 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Painel Principal - Clínica Veterinária</title>
-        <style>
-            :root {
-                --primary-color: #0d9488; /* Verde-água profissional */
-                --primary-hover: #0f766e;
-                --danger-color: #e11d48;
-                --danger-hover: #be123c;
-                --bg-color: #f0fdf4; /* Tom levemente esverdeado e suave */
-                --card-bg: #ffffff;
-                --text-color: #1f2937;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel - Clínica Veterinária</title>
+
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-hover: #0f766e;
+            --background: #f0fdf4;
+            --white: #ffffff;
+            --text: #1f2937;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #e11d48;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .topbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 75px;
+            gap: 25px;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-size: 21px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .navigation > a,
+        .nav-dropdown summary {
+            padding: 10px 12px;
+            border-radius: 7px;
+            font-size: 14px;
+            color: var(--text);
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .navigation > a:hover,
+        .nav-dropdown summary:hover {
+            background: #ccfbf1;
+            color: var(--primary-hover);
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .nav-dropdown summary::after {
+            content: "⌄";
+            margin-left: 6px;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 42px;
+            left: 0;
+            min-width: 180px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: 6px;
+            z-index: 10;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .dropdown-content a:hover {
+            background: #ccfbf1;
+            color: var(--primary-hover);
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        .logout {
+            border: none;
+            background: var(--danger);
+            color: white;
+            padding: 9px 13px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .logout:hover {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1450px;
+            margin: 35px auto;
+            padding: 0 30px;
+        }
+
+        .welcome {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            gap: 20px;
+        }
+
+        .welcome h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .new-appointment {
+            background: var(--primary);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .new-appointment:hover {
+            background: var(--primary-hover);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 23px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+        }
+
+        .card-label {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .card-value {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .card-description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 9px;
+        }
+
+        .section {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 23px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header h2 {
+            font-size: 19px;
+        }
+
+        .section-header p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-form input {
+            width: 250px;
+            padding: 11px 13px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .search-form input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-form button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 17px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background: var(--primary-hover);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        th {
+            color: var(--muted);
+            font-weight: bold;
+            background: #f8fafc;
+        }
+
+        td {
+            color: var(--text);
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .details-link {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .details-link:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 20px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            background: white;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            padding: 13px 16px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .message.error {
+            border-left-color: var(--danger);
+        }
+
+        @media (max-width: 1100px) {
+            .topbar {
+                flex-wrap: wrap;
+                padding: 18px 5%;
             }
 
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: var(--bg-color);
-                color: var(--text-color);
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-            }
-
-            .dashboard-card {
-                background: var(--card-bg);
-                padding: 2.5rem;
-                border-radius: 1rem;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            .navigation {
+                order: 3;
                 width: 100%;
-                max-width: 450px;
-                text-align: center;
-                border-top: 5px solid var(--primary-color);
             }
 
-            h1 {
-                margin-top: 0;
-                color: var(--text-color);
-                font-size: 1.75rem;
-                margin-bottom: 1.5rem;
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                padding: 0 15px;
+                margin-top: 25px;
             }
 
-            .menu-links {
-                display: flex;
+            .welcome,
+            .section-header {
+                align-items: flex-start;
                 flex-direction: column;
-                gap: 1rem;
-                margin-bottom: 1.5rem;
             }
 
-            a.btn-link, button[type="submit"] {
-                display: block;
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .search-form {
                 width: 100%;
-                padding: 0.75rem 1rem;
-                border-radius: 0.5rem;
-                font-size: 1rem;
-                font-weight: 600;
-                text-decoration: none;
-                cursor: pointer;
-                border: none;
-                transition: background-color 0.2s, transform 0.1s;
-                box-sizing: border-box;
             }
 
-            a.btn-link {
-                background-color: var(--primary-color);
-                color: white;
+            .search-form input {
+                width: 100%;
+                min-width: 0;
             }
 
-            a.btn-link:hover {
-                background-color: var(--primary-hover);
+            .user-area {
+                width: 100%;
+                justify-content: space-between;
             }
 
-            button[type="submit"] {
-                background-color: var(--danger-color);
-                color: white;
+            .navigation {
+                gap: 3px;
             }
+        }
+    </style>
+</head>
 
-            button[type="submit"]:hover {
-                background-color: var(--danger-hover);
-            }
-        </style>
-    </head>
-    <body>
-        <div class="dashboard-card">
-            <h1>🐾 Seja bem-vindo(a)!</h1>
-            
-        
-            <div class="menu-links">
-                <a class="btn-link" href="{% url 'cliente' %}">Clientes</a>
+<body>
 
-                <a class="btn-link" href="{% url 'animal' %}">Animais</a>
+<header class="topbar">
 
-                <a class="btn-link" href="{% url 'atendimento' %}">Atendimentos</a>
+    <a href="{% url 'index' %}" class="logo">
+        Clínica Veterinária
+    </a>
 
-                <a class="btn-link" href="{% url 'funcionario' %}">Funcionários</a>
-                
-                <a class="btn-link" href="{% url 'servico' %}">Serviços</a>
+    <nav class="navigation">
 
-                <a class="btn-link" href="{% url 'fornecedor' %}">Fornecedores</a>
+        <a href="{% url 'index' %}">Início</a>
 
-                <a class="btn-link" href="{% url 'produto' %}">Produtos</a>
+        <a href="{% url 'cliente' %}">Clientes</a>
 
-                <a class="btn-link" href="{% url 'lote' %}">Lotes</a>
+        {% if perms.app.view_animal %}
+            <a href="{% url 'animal' %}">Animais</a>
+        {% endif %}
 
-                <a class="btn-link" href="{% url 'fatura' %}">Faturas</a>
+        {% if perms.app.view_atendimento %}
+            <a href="{% url 'atendimento' %}">Atendimentos</a>
+        {% endif %}
 
-            </div>
+        {% if perms.app.view_fatura %}
+            <a href="{% url 'fatura' %}">Faturas</a>
+        {% endif %}
 
+        {% if perms.app.view_produto or perms.app.view_lote or perms.app.view_fornecedor or perms.app.view_servico %}
+            <details class="nav-dropdown">
+                <summary>Estoque</summary>
 
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Sair do Sistema</button>
-            </form>
-        </div>
+                <div class="dropdown-content">
 
-        <!-- {% if messages %}
+                    {% if perms.app.view_produto %}
+                        <a href="{% url 'produto' %}">Produtos</a>
+                    {% endif %}
+
+                    {% if perms.app.view_lote %}
+                        <a href="{% url 'lote' %}">Lotes</a>
+                    {% endif %}
+
+                    {% if perms.app.view_fornecedor %}
+                        <a href="{% url 'fornecedor' %}">Fornecedores</a>
+                    {% endif %}
+
+                    {% if perms.app.view_servico %}
+                        <a href="{% url 'servico' %}">Serviços</a>
+                    {% endif %}
+
+                </div>
+            </details>
+        {% endif %}
+
+        {% if perms.app.view_funcionario %}
+            <a href="{% url 'funcionario' %}">Funcionários</a>
+        {% endif %}
+
+    </nav>
+
+    <div class="user-area">
+        <span class="user-name">{{ nome_usuario }}</span>
+
+        <form action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="logout">Sair</button>
+        </form>
+    </div>
+
+</header>
+
+<main class="container">
+
+    {% if messages %}
+        <div class="messages">
             {% for message in messages %}
-                <div class="alert alert-warning" role="alert">
+                <div class="message {% if message.tags == 'error' %}error{% endif %}">
                     {{ message }}
                 </div>
             {% endfor %}
-        {% endif %} -->
-    </body>
+        </div>
+    {% endif %}
+
+    <section class="welcome">
+
+        <div>
+            <h1>Olá, {{ nome_usuario }}!</h1>
+            <p>Bem-vindo ao painel de gerenciamento da clínica.</p>
+        </div>
+
+        {% if perms.app.add_atendimento %}
+            <a href="{% url 'atendimento_cadastro' %}" class="new-appointment">
+                + Novo atendimento
+            </a>
+        {% endif %}
+
+    </section>
+
+    <section class="cards">
+
+        <div class="card">
+            <div class="card-label">Atendimentos em aberto</div>
+            <div class="card-value">{{ atendimentos_abertos_total }}</div>
+            <div class="card-description">
+                Atendimentos aguardando conclusão
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">Faturas com saldo pendente</div>
+            <div class="card-value">{{ faturas_pendentes }}</div>
+            <div class="card-description">
+                Faturas ainda não quitadas
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">Saldo a receber</div>
+            <div class="card-value">
+                R$ {{ saldo_total|floatformat:2 }}
+            </div>
+            <div class="card-description">
+                Valor restante das faturas
+            </div>
+        </div>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+                <h2>Atendimentos em andamento</h2>
+                <p>Consulte os atendimentos que ainda estão em aberto.</p>
+            </div>
+
+            <form method="GET" action="{% url 'index' %}" class="search-form">
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Buscar cliente, animal ou responsável..."
+                    value="{{ pesquisa }}"
+                >
+                <button type="submit">Buscar</button>
+            </form>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Animal</th>
+                        <th>Serviço</th>
+                        <th>Responsável</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for atendimento in atendimentos %}
+
+                        <tr>
+                            <td>{{ atendimento.data|date:"d/m/Y" }}</td>
+
+                            <td>
+                                {{ atendimento.animal.tutor.nome }}
+                                {{ atendimento.animal.tutor.sobrenome }}
+                            </td>
+
+                            <td>{{ atendimento.animal.nome }}</td>
+
+                            <td>{{ atendimento.servico.nome }}</td>
+
+                            <td>
+                                {{ atendimento.funcionario.nome }}
+                                {{ atendimento.funcionario.sobrenome }}
+                            </td>
+
+                            <td>
+                                R$ {{ atendimento.valor_total|floatformat:2 }}
+                            </td>
+
+                            <td>
+                                <span class="status">Em aberto</span>
+                            </td>
+
+                            <td>
+                                <a
+                                    href="{% url 'atendimento_detalhe' atendimento.pk %}"
+                                    class="details-link"
+                                >
+                                    Visualizar
+                                </a>
+                            </td>
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+                            <td colspan="8" class="empty">
+                                {% if pesquisa %}
+                                    Nenhum atendimento encontrado para essa pesquisa.
+                                {% else %}
+                                    Não existem atendimentos em aberto no momento.
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
 </html>

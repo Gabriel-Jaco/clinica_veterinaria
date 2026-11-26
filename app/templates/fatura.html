@@ -1,96 +1,421 @@
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Faturas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faturas | Clínica Veterinária</title>
+
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
-        .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-        h1 { margin: 0; font-size: 22px; }
-        .topo { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
-        .btn-sec { background: #6b7280; }
-        .btn-pequeno { padding: 4px 10px; font-size: 13px; }
-        .messages { list-style: none; padding: 0; margin: 0 0 16px; }
-        .messages li { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; background: #e0f2fe; }
-        .messages .success { background: #dcfce7; }
-        .messages .error { background: #fee2e2; }
-        .filtro { margin-bottom: 16px; font-size: 14px; }
-        .filtro select { padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; margin-left: 6px; }
-        .tabela-scroll { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; white-space: nowrap; }
-        th { background: #f9fafb; }
-        td.valor, th.valor { text-align: right; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background: #e5e7eb; }
-        .badge-pendente { background: #fee2e2; }
-        .badge-parcial { background: #fef3c7; }
-        .badge-pago { background: #dcfce7; }
-        .vazio { text-align: center; color: #6b7280; padding: 24px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f0fdf4;
+            color: #334155;
+        }
+
+        header {
+            background: #0d9488;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 22px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        nav a, nav button {
+            color: white;
+            text-decoration: none;
+            background: transparent;
+            border: none;
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav button:hover {
+            background: #0f766e;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 35px auto;
+        }
+
+        .topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .topo h2 {
+            color: #0f766e;
+            font-size: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #0d9488;
+            color: white;
+            text-decoration: none;
+            padding: 11px 17px;
+            border-radius: 7px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #0f766e;
+        }
+
+        .btn-secundario {
+            background: #64748b;
+        }
+
+        .btn-secundario:hover {
+            background: #475569;
+        }
+
+        .filtros {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+
+        .filtros form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filtros input, .filtros select {
+            flex: 1;
+            min-width: 190px;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .contador {
+            margin: 15px 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .tabela-container {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        th {
+            background: #ccfbf1;
+            color: #115e59;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pendente {
+            background: #ffe4e6;
+            color: #be123c;
+        }
+
+        .parcial {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .pago {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .btn-acao {
+            display: inline-block;
+            padding: 7px 10px;
+            border-radius: 5px;
+            color: white;
+            background: #0d9488;
+            text-decoration: none;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .btn-acao:hover {
+            background: #0f766e;
+        }
+
+        .mensagem {
+            padding: 13px 16px;
+            margin-bottom: 15px;
+            border-radius: 7px;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .mensagem.error {
+            background: #ffe4e6;
+            color: #be123c;
+        }
+
+        .vazio {
+            text-align: center;
+            padding: 35px;
+            color: #64748b;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .container {
+                width: 95%;
+                margin: 22px auto;
+            }
+
+            .topo {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .filtros form {
+                flex-direction: column;
+            }
+
+            .filtros input, .filtros select {
+                width: 100%;
+            }
+        }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <div class="topo">
-        <h1>Faturas</h1>
-        <div>
-            <a class="btn btn-sec" href="{% url 'index' %}">Início</a>
-            <a class="btn" href="{% url 'fatura_cadastro' %}">Emitir fatura</a>
-        </div>
-    </div>
+
+<header>
+    <h1>Clínica Veterinária</h1>
+
+    <nav>
+        <a href="{% url 'index' %}">Início</a>
+        <a href="{% url 'cliente' %}">Clientes</a>
+
+        {% if perms.app.view_animal %}
+            <a href="{% url 'animal' %}">Animais</a>
+        {% endif %}
+
+        {% if perms.app.view_atendimento %}
+            <a href="{% url 'atendimento' %}">Atendimentos</a>
+        {% endif %}
+
+        {% if perms.app.view_fatura %}
+            <a href="{% url 'fatura' %}">Faturas</a>
+        {% endif %}
+
+        {% if perms.app.view_produto %}
+            <a href="{% url 'produto' %}">Produtos</a>
+        {% endif %}
+
+        {% if perms.app.view_lote %}
+            <a href="{% url 'lote' %}">Lotes</a>
+        {% endif %}
+
+        {% if perms.app.view_fornecedor %}
+            <a href="{% url 'fornecedor' %}">Fornecedores</a>
+        {% endif %}
+
+        {% if perms.app.view_servico %}
+            <a href="{% url 'servico' %}">Serviços</a>
+        {% endif %}
+
+        {% if perms.app.view_funcionario %}
+            <a href="{% url 'funcionario' %}">Funcionários</a>
+        {% endif %}
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Sair</button>
+        </form>
+    </nav>
+</header>
+
+<main class="container">
 
     {% if messages %}
-    <ul class="messages">
         {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
+            <div class="mensagem {% if message.tags == 'error' %}error{% endif %}">
+                {{ message }}
+            </div>
         {% endfor %}
-    </ul>
     {% endif %}
 
-    <form method="get" class="filtro">
-        <label for="status">Situação:</label>
-        <select name="status" id="status" onchange="this.form.submit()">
-            <option value="">Todas</option>
-            {% for valor, nome in status_opcoes %}
-            <option value="{{ valor }}" {% if valor == status_selecionado %}selected{% endif %}>{{ nome }}</option>
-            {% endfor %}
-        </select>
-    </form>
+    <div class="topo">
+        <h2>Faturas</h2>
 
-    <div class="tabela-scroll">
+        {% if perms.app.add_fatura %}
+            <a href="{% url 'fatura_cadastro' %}" class="btn">
+                + Nova fatura
+            </a>
+        {% endif %}
+    </div>
+
+    <section class="filtros">
+        <form method="get">
+
+            <input
+                type="text"
+                name="q"
+                placeholder="Pesquisar pelo nome ou CPF do tutor..."
+                value="{{ pesquisa }}"
+            >
+
+            <select name="status">
+                <option value="">Todos os pagamentos</option>
+
+                {% for valor, nome in status_opcoes %}
+                    <option value="{{ valor }}"
+                        {% if status_selecionado == valor %}selected{% endif %}>
+                        {{ nome }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn">Pesquisar</button>
+
+            <a href="{% url 'fatura' %}" class="btn btn-secundario">
+                Limpar
+            </a>
+
+        </form>
+    </section>
+
+    <p class="contador">
+        {{ faturas|length }} fatura(s) encontrada(s).
+    </p>
+
+    <section class="tabela-container">
         <table>
             <thead>
                 <tr>
-                    <th>Nº</th>
-                    <th>Emissão</th>
-                    <th>Cliente</th>
-                    <th class="valor">Valor</th>
-                    <th class="valor">Pago</th>
-                    <th class="valor">Saldo</th>
-                    <th>Situação</th>
+                    <th>Nº da fatura</th>
+                    <th>Tutor</th>
+                    <th>Data de emissão</th>
+                    <th>Valor total</th>
+                    <th>Valor pago</th>
+                    <th>Saldo restante</th>
+                    <th>Pagamento</th>
                     <th>Ações</th>
                 </tr>
             </thead>
+
             <tbody>
-                {% for f in faturas %}
-                <tr>
-                    <td>#{{ f.pk }}</td>
-                    <td>{{ f.data_emissao|date:"d/m/Y" }}</td>
-                    <td>{{ f.cliente.nome }} {{ f.cliente.sobrenome }}</td>
-                    <td class="valor">R$ {{ f.valor_final|floatformat:2 }}</td>
-                    <td class="valor">R$ {{ f.pago_calc|floatformat:2 }}</td>
-                    <td class="valor">R$ {{ f.saldo_calc|floatformat:2 }}</td>
-                    <td><span class="badge badge-{{ f.status_calc.value }}">{{ f.status_calc.label }}</span></td>
-                    <td><a class="btn btn-pequeno" href="{% url 'fatura_detalhe' f.pk %}">Ver</a></td>
-                </tr>
+                {% for fatura in faturas %}
+                    <tr>
+                        <td>#{{ fatura.pk }}</td>
+
+                        <td>
+                            {{ fatura.cliente.nome }}
+                            {{ fatura.cliente.sobrenome }}
+                        </td>
+
+                        <td>{{ fatura.data_emissao|date:"d/m/Y" }}</td>
+
+                        <td>
+                            R$ {{ fatura.valor_final|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            R$ {{ fatura.pago_calc|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            R$ {{ fatura.saldo_calc|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            {% if fatura.status_calc == 'pago' %}
+                                <span class="status pago">Pago</span>
+                            {% elif fatura.status_calc == 'parcial' %}
+                                <span class="status parcial">Parcial</span>
+                            {% else %}
+                                <span class="status pendente">Pendente</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a
+                                href="{% url 'fatura_detalhe' fatura.pk %}"
+                                class="btn-acao">
+                                Visualizar
+                            </a>
+                        </td>
+                    </tr>
+
                 {% empty %}
-                <tr><td colspan="8" class="vazio">Nenhuma fatura encontrada.</td></tr>
+                    <tr>
+                        <td colspan="8" class="vazio">
+                            Nenhuma fatura encontrada.
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
-</div>
+    </section>
+
+</main>
+
 </body>
 </html>

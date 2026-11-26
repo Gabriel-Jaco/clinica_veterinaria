@@ -1,66 +1,382 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Atendimentos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atendimentos - Clínica Veterinária</title>
+
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
-        .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-        h1 { margin: 0; font-size: 22px; }
-        .topo { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
-        .btn-sec { background: #6b7280; }
-        .btn-perigo { background: #dc2626; }
-        .btn-pequeno { padding: 4px 10px; font-size: 13px; }
-        .messages { list-style: none; padding: 0; margin: 0 0 16px; }
-        .messages li { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; background: #e0f2fe; }
-        .messages .success { background: #dcfce7; }
-        .messages .error { background: #fee2e2; }
-        .filtro { margin-bottom: 16px; font-size: 14px; }
-        .filtro select { padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; margin-left: 6px; }
-        .tabela-scroll { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; white-space: nowrap; }
-        th { background: #f9fafb; }
-        td.valor, th.valor { text-align: right; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background: #e5e7eb; }
-        .badge-aberto, .badge-parcial { background: #fef3c7; }
-        .badge-concluido, .badge-pago { background: #dcfce7; }
-        .badge-cancelado { background: #fee2e2; }
-        .vazio { text-align: center; color: #6b7280; padding: 24px; }
+        :root {
+            --primary: #0d9488;
+            --primary-hover: #0f766e;
+            --background: #f0fdf4;
+            --danger: #e11d48;
+            --text: #1f2937;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 17px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h2 {
+            font-size: 21px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 17px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1450px;
+            margin: 35px auto;
+        }
+
+        .topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .topo h1 {
+            font-size: 27px;
+        }
+
+        .topo p {
+            color: var(--muted);
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 7px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secundario {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secundario:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-perigo {
+            background: var(--danger);
+        }
+
+        .btn-perigo:hover {
+            background: #be123c;
+        }
+
+        .filtros {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+
+        .filtros form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filtros input,
+        .filtros select {
+            flex: 1;
+            min-width: 190px;
+            padding: 11px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .contador {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .mensagem {
+            padding: 13px 16px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .mensagem.error {
+            background: #ffe4e6;
+            color: #9f1239;
+        }
+
+        .tabela-container {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th, td {
+            padding: 15px 13px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .aberto {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .concluido {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .cancelado {
+            background: #ffe4e6;
+            color: #9f1239;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .acoes a {
+            padding: 7px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        .acoes a:hover {
+            filter: brightness(.95);
+        }
+
+        .acoes .editar {
+            background: #ccfbf1;
+            color: #115e59;
+        }
+
+        .acoes .cancelar {
+            background: #ffe4e6;
+            color: #9f1239;
+        }
+
+        .vazio {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                gap: 12px;
+            }
+
+            .container {
+                width: 94%;
+                margin-top: 25px;
+            }
+
+            .topo {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .filtros form {
+                flex-direction: column;
+            }
+
+            .filtros input,
+            .filtros select {
+                width: 100%;
+            }
+        }
     </style>
 </head>
+
 <body>
-<div class="container">
+
+<header>
+    <h2>Clínica Veterinária</h2>
+
+    <nav>
+        <a href="{% url 'index' %}">Início</a>
+        <a href="{% url 'cliente' %}">Clientes</a>
+
+        {% if perms.app.view_animal %}
+            <a href="{% url 'animal' %}">Animais</a>
+        {% endif %}
+
+        {% if perms.app.view_atendimento %}
+            <a href="{% url 'atendimento' %}">Atendimentos</a>
+        {% endif %}
+
+        {% if perms.app.view_fatura %}
+            <a href="{% url 'fatura' %}">Faturas</a>
+        {% endif %}
+
+        {% if perms.app.view_produto or perms.app.view_lote or perms.app.view_fornecedor or perms.app.view_servico %}
+            <a href="{% url 'produto' %}">Estoque</a>
+        {% endif %}
+
+        {% if perms.app.view_funcionario %}
+            <a href="{% url 'funcionario' %}">Funcionários</a>
+        {% endif %}
+
+        <a href="{% url 'logout' %}">Sair</a>
+    </nav>
+</header>
+
+<main class="container">
+
     <div class="topo">
-        <h1>Atendimentos</h1>
         <div>
-            <a class="btn btn-sec" href="{% url 'index' %}">Início</a>
-            <a class="btn" href="{% url 'atendimento_cadastro' %}">Novo atendimento</a>
+            <h1>Atendimentos</h1>
+            <p>Consulte e acompanhe os atendimentos da clínica.</p>
         </div>
+
+        {% if perms.app.add_atendimento %}
+            <a href="{% url 'atendimento_cadastro' %}" class="btn">
+                + Novo atendimento
+            </a>
+        {% endif %}
     </div>
 
     {% if messages %}
-    <ul class="messages">
         {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
+            <div class="mensagem {% if message.tags == 'error' %}error{% endif %}">
+                {{ message }}
+            </div>
         {% endfor %}
-    </ul>
     {% endif %}
 
-    <form method="get" class="filtro">
-        <label for="status">Status:</label>
-        <select name="status" id="status" onchange="this.form.submit()">
-            <option value="">Todos</option>
-            {% for valor, nome in status_opcoes %}
-            <option value="{{ valor }}" {% if valor == status_selecionado %}selected{% endif %}>{{ nome }}</option>
-            {% endfor %}
-        </select>
-    </form>
+    <section class="filtros">
+        <form method="GET">
+            <input
+                type="text"
+                name="q"
+                placeholder="Pesquisar animal, tutor, serviço ou funcionário..."
+                value="{{ pesquisa }}"
+            >
 
-    <div class="tabela-scroll">
+            <select name="status">
+                <option value="">Todos os status</option>
+
+                {% for valor, descricao in status_opcoes %}
+                    <option value="{{ valor }}"
+                        {% if status_selecionado == valor %}selected{% endif %}>
+                        {{ descricao }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn">Filtrar</button>
+
+            <a href="{% url 'atendimento' %}" class="btn btn-secundario">
+                Limpar
+            </a>
+        </form>
+    </section>
+
+    <p class="contador">
+        {{ atendimentos|length }} atendimento(s) encontrado(s).
+    </p>
+
+    <div class="tabela-container">
         <table>
             <thead>
                 <tr>
@@ -68,42 +384,100 @@
                     <th>Animal</th>
                     <th>Tutor</th>
                     <th>Serviço</th>
+                    <th>Funcionário</th>
+                    <th>Valor total</th>
                     <th>Status</th>
                     <th>Pagamento</th>
-                    <th class="valor">Total</th>
                     <th>Ações</th>
                 </tr>
             </thead>
+
             <tbody>
-                {% for a in atendimentos %}
-                <tr>
-                    <td>{{ a.data|date:"d/m/Y" }}</td>
-                    <td>{{ a.animal.nome }}</td>
-                    <td>{{ a.animal.tutor.nome }} {{ a.animal.tutor.sobrenome }}</td>
-                    <td>{{ a.servico.nome }}</td>
-                    <td><span class="badge badge-{{ a.status }}">{{ a.get_status_display }}</span></td>
-                    <td>
-                        {% if a.status == "cancelado" %}
-                            —
-                        {% else %}
-                            <span class="badge badge-{{ a.status_pagamento.value }}">{{ a.status_pagamento.label }}</span>
-                        {% endif %}
-                    </td>
-                    <td class="valor">R$ {{ a.valor_total|floatformat:2 }}</td>
-                    <td>
-                        <a class="btn btn-pequeno" href="{% url 'atendimento_detalhe' a.pk %}">Ver</a>
-                        {% if a.status != "cancelado" and not a.fatura_id %}
-                        <a class="btn btn-pequeno btn-sec" href="{% url 'atendimento_editar' a.pk %}">Editar</a>
-                        <a class="btn btn-pequeno btn-perigo" href="{% url 'atendimento_cancelar' a.pk %}">Cancelar</a>
-                        {% endif %}
-                    </td>
-                </tr>
+                {% for atendimento in atendimentos %}
+                    <tr>
+                        <td>{{ atendimento.data|date:"d/m/Y" }}</td>
+
+                        <td>
+                            {{ atendimento.animal.nome }}
+                            {{ atendimento.animal.sobrenome|default:"" }}
+                        </td>
+
+                        <td>
+                            {{ atendimento.animal.tutor.nome }}
+                            {{ atendimento.animal.tutor.sobrenome }}
+                        </td>
+
+                        <td>{{ atendimento.servico.nome }}</td>
+
+                        <td>
+                            {{ atendimento.funcionario.nome }}
+                            {{ atendimento.funcionario.sobrenome }}
+                        </td>
+
+                        <td>
+                            R$ {{ atendimento.valor_total|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            {% if atendimento.status == "aberto" %}
+                                <span class="status aberto">Aberto</span>
+                            {% elif atendimento.status == "concluido" %}
+                                <span class="status concluido">Concluído</span>
+                            {% elif atendimento.status == "cancelado" %}
+                                <span class="status cancelado">Cancelado</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if atendimento.fatura %}
+                                {{ atendimento.status_pagamento }}
+                            {% else %}
+                                Não faturado
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="acoes">
+                                <a href="{% url 'atendimento_detalhe' atendimento.pk %}">
+                                    Ver
+                                </a>
+
+                                {% if perms.app.change_atendimento %}
+                                    {% if atendimento.status == "aberto" and not atendimento.fatura %}
+                                        <a
+                                            href="{% url 'atendimento_editar' atendimento.pk %}"
+                                            class="editar">
+                                            Editar
+                                        </a>
+
+                                        <a
+                                            href="{% url 'atendimento_cancelar' atendimento.pk %}"
+                                            class="cancelar">
+                                            Cancelar
+                                        </a>
+                                    {% elif atendimento.status == "aberto" and atendimento.fatura and atendimento.status_pagamento != "PAGO" %}
+                                        <a
+                                            href="{% url 'atendimento_editar' atendimento.pk %}"
+                                            class="editar">
+                                            Editar
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
                 {% empty %}
-                <tr><td colspan="8" class="vazio">Nenhum atendimento encontrado.</td></tr>
+                    <tr>
+                        <td colspan="9" class="vazio">
+                            Nenhum atendimento encontrado.
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-</div>
+
+</main>
+
 </body>
 </html>

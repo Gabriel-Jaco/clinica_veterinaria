@@ -1,169 +1,498 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Lista de Clientes - Clínica Veterinária</title>
-        <style>
-            :root {
-                --primary-color: #0d9488; /* Verde-água profissional */
-                --primary-hover: #0f766e;
-                --bg-color: #f0fdf4; /* Tom levemente esverdeado e suave */
-                --card-bg: #ffffff;
-                --text-color: #1f2937;
-                --border-color: #e5e7eb;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Clínica Veterinária</title>
 
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: var(--bg-color);
-                color: var(--text-color);
-                margin: 0;
-                padding: 2rem;
-                display: flex;
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-hover: #0f766e;
+            --background: #f0fdf4;
+            --white: #ffffff;
+            --text: #1f2937;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #e11d48;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        nav a, .menu-label {
+            text-decoration: none;
+            color: var(--muted);
+            padding: 10px 13px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        nav a:hover, nav a.active {
+            background: #ccfbf1;
+            color: var(--primary-hover);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 160px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px;
+            z-index: 10;
+            box-shadow: 0 5px 15px #00000012;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+        }
+
+        .logout {
+            color: var(--danger);
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 35px auto;
+            padding: 0 5%;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .page-header h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 17px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-edit {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .btn-delete {
+            background: #ffe4e6;
+            color: var(--danger);
+        }
+
+        .search-card, .table-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-form input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-form input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-form button {
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 0 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .search-form button:hover {
+            background: var(--primary-hover);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 10px;
+        }
+
+        .table-header h2 {
+            font-size: 18px;
+        }
+
+        .count {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 15px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            background: #f8fafc;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .actions .btn {
+            padding: 8px 11px;
+            font-size: 12px;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 13px 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            background: #ccfbf1;
+            color: #115e59;
+        }
+
+        .message.error {
+            background: #ffe4e6;
+            color: #9f1239;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 15px;
+            color: var(--muted);
+        }
+
+        .empty h3 {
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 850px) {
+            header {
+                align-items: flex-start;
                 flex-direction: column;
-                align-items: center;
-                min-height: 100vh;
-                box-sizing: border-box;
             }
 
-            .container {
+            nav {
                 width: 100%;
-                max-width: 1200px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .search-form {
+                flex-direction: column;
             }
 
-            .header-nav {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 2rem;
+            .search-form button {
+                padding: 12px;
             }
 
-            h1 {
-                color: var(--text-color);
-                font-size: 2rem;
-                margin: 0;
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
             }
+        }
+    </style>
+</head>
 
-            /* Botão Voltar elegante */
-            a.btn-voltar {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                background-color: white;
-                color: var(--primary-color);
-                border: 2px solid var(--primary-color);
-                padding: 0.5rem 1rem;
-                border-radius: 0.5rem;
-                font-weight: 600;
-                text-decoration: none;
-                transition: all 0.2s ease;
-            }
+<body>
 
-            a.btn-voltar:hover {
-                background-color: var(--primary-color);
-                color: white;
-            }
+<header>
+    <div class="logo">Clínica Veterinária</div>
 
-            /* Card da Tabela */
-            .table-card {
-                background: var(--card-bg);
-                border-radius: 1rem;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-                overflow: hidden;
-                border-top: 5px solid var(--primary-color);
-            }
+    <nav>
+        <a href="{% url 'index' %}">Início</a>
 
-            .table-responsive {
-                overflow-x: auto;
-            }
+        <a href="{% url 'cliente' %}" class="active">Clientes</a>
 
-            table.table {
-                width: 100%;
-                border-collapse: collapse;
-                text-align: left;
-                white-space: nowrap;
-            }
+        {% if perms.app.view_animal %}
+            <a href="{% url 'animal' %}">Animais</a>
+        {% endif %}
 
-            table.table th {
-                background-color: #f8fafc;
-                color: #475569;
-                font-weight: 600;
-                padding: 1rem 1.25rem;
-                font-size: 0.9rem;
-                border-bottom: 2px solid var(--border-color);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
+        {% if perms.app.view_atendimento %}
+            <a href="{% url 'atendimento' %}">Atendimentos</a>
+        {% endif %}
 
-            table.table td {
-                padding: 1rem 1.25rem;
-                color: var(--text-color);
-                border-bottom: 1px solid var(--border-color);
-                font-size: 0.95rem;
-            }
+        {% if perms.app.view_fatura %}
+            <a href="{% url 'fatura' %}">Faturas</a>
+        {% endif %}
 
-            table.table tbody tr {
-                transition: background-color 0.15s ease;
-            }
+        {% if perms.app.view_produto %}
+            <div class="dropdown">
+                <span class="menu-label">Estoque ▾</span>
+                <div class="dropdown-content">
+                    <a href="{% url 'produto' %}">Produtos</a>
 
-            table.table tbody tr:hover {
-                background-color: #f0fdf4; /* Destaque leve ao passar o mouse na linha */
-            }
+                    {% if perms.app.view_lote %}
+                        <a href="{% url 'lote' %}">Lotes</a>
+                    {% endif %}
 
-            table.table tbody tr:last-child td {
-                border-bottom: none;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header-nav">
-                <h1>🐾 Lista de Clientes</h1>
-                <a class="btn-voltar" href="{% url 'index' %}">← Voltar ao Início</a>
-                <a class="btn-voltar" href="{% url 'cadastro_cliente' %}">+ Cadastrar Cliente</a>
+                    {% if perms.app.view_fornecedor %}
+                        <a href="{% url 'fornecedor' %}">Fornecedores</a>
+                    {% endif %}
+
+                    {% if perms.app.view_servico %}
+                        <a href="{% url 'servico' %}">Serviços</a>
+                    {% endif %}
+                </div>
             </div>
-            
-           
+        {% endif %}
 
-            <div class="table-card">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Sobrenome</th>
-                                <th>CPF</th>
-                                <th>Contato</th>
-                                <th>Data de Nascimento</th>
-                                <th>Gênero</th>
-                                <th>Endereço</th> 
-                                <th>Cidade</th> 
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        {% if perms.app.view_funcionario %}
+            <a href="{% url 'funcionario' %}">Funcionários</a>
+        {% endif %}
+
+        <form action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="logout">Sair</button>
+        </form>
+    </nav>
+</header>
+
+<main>
+
+    <div class="page-header">
+        <div>
+            <h1>Clientes</h1>
+            <p>Consulte e gerencie os tutores cadastrados na clínica.</p>
+        </div>
+
+        {% if perms.app.add_cliente %}
+            <a href="{% url 'cadastro_cliente' %}" class="btn btn-primary">
+                + Cadastrar cliente
+            </a>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {% if message.tags == 'error' %}error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <section class="search-card">
+        <form method="GET" class="search-form">
+            <input
+                type="text"
+                name="q"
+                value="{{ pesquisa }}"
+                placeholder="Buscar por nome, CPF ou contato..."
+            >
+
+            <button type="submit">Pesquisar</button>
+
+            {% if pesquisa %}
+                <a href="{% url 'cliente' %}" class="btn btn-edit">
+                    Limpar
+                </a>
+            {% endif %}
+        </form>
+    </section>
+
+    <section class="table-card">
+
+        <div class="table-header">
+            <h2>Clientes cadastrados</h2>
+            <span class="count">
+                {{ clientes|length }} registro(s)
+            </span>
+        </div>
+
+        {% if clientes %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Contato</th>
+                            <th>Cidade</th>
+                            <th>Endereço</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
                         {% for cliente in clientes %}
                             <tr>
-                                <td><strong>{{ cliente.nome }}</strong></td>
-                                <td>{{ cliente.sobrenome }}</td>
-                                <td>{{ cliente.cpf }}</td>
-                                <td>{{ cliente.contato }}</td>
-                                <td>{{ cliente.data_nascimento }}</td>
-                                <td>{{ cliente.genero }}</td>
-                                <td>{{ cliente.endereco }}</td>
-                                <td>{{ cliente.endereco.cidade }}</td>
                                 <td>
-                                    <a href="{% url 'editar_cliente' cliente.pk %}">Editar</a>
-                                
-                                    <a href="{% url 'excluir_cliente' cliente.pk %}">Excluir</a>
+                                    <strong>
+                                        {{ cliente.nome }} {{ cliente.sobrenome }}
+                                    </strong>
+                                </td>
+
+                                <td>{{ cliente.cpf }}</td>
+
+                                <td>{{ cliente.contato }}</td>
+
+                                <td>
+                                    {{ cliente.endereco.cidade.cidade }}
+                                    - {{ cliente.endereco.cidade.uf }}
+                                </td>
+
+                                <td>
+                                    {{ cliente.endereco.rua }},
+                                    {{ cliente.endereco.numero }}
+                                </td>
+
+                                <td>
+                                    <div class="actions">
+                                        {% if perms.app.change_cliente %}
+                                            <a
+                                                href="{% url 'editar_cliente' cliente.pk %}"
+                                                class="btn btn-edit"
+                                            >
+                                                Editar
+                                            </a>
+                                        {% endif %}
+
+                                        {% if perms.app.delete_cliente %}
+                                            <a
+                                                href="{% url 'excluir_cliente' cliente.pk %}"
+                                                class="btn btn-delete"
+                                            >
+                                                Excluir
+                                            </a>
+                                        {% endif %}
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
-        </div>
-    </body>
+
+        {% else %}
+            <div class="empty">
+                <h3>Nenhum cliente encontrado</h3>
+
+                {% if pesquisa %}
+                    <p>Não encontramos clientes com os dados informados.</p>
+                {% else %}
+                    <p>Ainda não existem clientes cadastrados.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </section>
+
+</main>
+
+</body>
 </html>

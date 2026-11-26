@@ -1,5 +1,4 @@
 from decimal import Decimal, ROUND_HALF_UP
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
@@ -324,16 +323,98 @@ class FuncionarioDeleteView(PermissaoComRedirecionamentoMixin, View):
         return redirect("funcionario")
 
 
+
 class IndexView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "index.html")
+        pesquisa = request.GET.get('q', '').strip()
+
+        atendimentos_base = Atendimento.objects.filter(
+            status=Atendimento.Status.ABERTO
+        ).select_related(
+            'animal',
+            'animal__tutor',
+            'servico',
+            'funcionario'
+        ).order_by('-data', '-pk')
+
+        atendimentos_abertos_total = atendimentos_base.count()
+
+        atendimentos = atendimentos_base
+
+        if pesquisa:
+            atendimentos = atendimentos.filter(
+                Q(animal__nome__icontains=pesquisa) |
+                Q(animal__sobrenome__icontains=pesquisa) |
+                Q(animal__tutor__nome__icontains=pesquisa) |
+                Q(animal__tutor__sobrenome__icontains=pesquisa) |
+                Q(funcionario__nome__icontains=pesquisa) |
+                Q(funcionario__sobrenome__icontains=pesquisa) |
+                Q(servico__nome__icontains=pesquisa)
+            )
+
+        faturas = Fatura.objects.annotate(
+            pago_calc=Coalesce(
+                Sum(
+                    'pagamentos__valor',
+                    filter=Q(pagamentos__estornado=False)
+                ),
+                Value(Decimal('0.00')),
+                output_field=DecimalField(
+                    max_digits=10,
+                    decimal_places=2
+                )
+            )
+        ).values_list('valor_final', 'pago_calc')
+
+        faturas_pendentes = 0
+        saldo_total = Decimal('0.00')
+
+        for valor_final, pago in faturas:
+            saldo = valor_final - pago
+
+            if saldo > 0:
+                faturas_pendentes += 1
+                saldo_total += saldo
+
+        funcionario = Funcionario.objects.filter(
+            usuario=request.user
+        ).first()
+
+        if funcionario:
+            nome_usuario = f"{funcionario.nome} {funcionario.sobrenome}"
+        else:
+            nome_usuario = request.user.get_full_name() or request.user.username
+
+        return render(request, 'index.html', {
+            'atendimentos': atendimentos,
+            'atendimentos_abertos_total': atendimentos_abertos_total,
+            'faturas_pendentes': faturas_pendentes,
+            'saldo_total': saldo_total,
+            'pesquisa': pesquisa,
+            'nome_usuario': nome_usuario
+        })
 
 
 class ClienteView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        clientes = Cliente.objects.all()
-        return render(request, "cliente.html", {"clientes": clientes})
+        pesquisa = request.GET.get('q', '').strip()
 
+        clientes = Cliente.objects.select_related(
+            'endereco__cidade'
+        ).all().order_by('nome', 'sobrenome')
+
+        if pesquisa:
+            clientes = clientes.filter(
+                Q(nome__icontains=pesquisa) |
+                Q(sobrenome__icontains=pesquisa) |
+                Q(cpf__icontains=pesquisa) |
+                Q(contato__icontains=pesquisa)
+            )
+
+        return render(request, "cliente.html", {
+            "clientes": clientes,
+            "pesquisa": pesquisa
+        })
 class FuncionarioView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_funcionario'
 
@@ -445,13 +526,27 @@ class AnimalView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_animal'
 
     def get(self, request):
+        pesquisa = request.GET.get('q', '').strip()
+
         animais = Animal.objects.select_related(
             'raca__especie',
             'tutor'
-        ).all()
+        ).all().order_by('nome', 'sobrenome')
+
+        if pesquisa:
+            animais = animais.filter(
+                Q(nome__icontains=pesquisa) |
+                Q(sobrenome__icontains=pesquisa) |
+                Q(rg__icontains=pesquisa) |
+                Q(raca__nome__icontains=pesquisa) |
+                Q(raca__especie__nome__icontains=pesquisa) |
+                Q(tutor__nome__icontains=pesquisa) |
+                Q(tutor__sobrenome__icontains=pesquisa)
+            )
 
         return render(request, 'animal.html', {
-            'animais': animais
+            'animais': animais,
+            'pesquisa': pesquisa
         })
 
 
@@ -1010,6 +1105,9 @@ class AtendimentoView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_atendimento'
 
     def get(self, request):
+        pesquisa = request.GET.get('q', '').strip()
+        status = request.GET.get('status', '')
+
         atendimentos = Atendimento.objects.select_related(
             'animal__tutor',
             'servico',
@@ -1017,13 +1115,24 @@ class AtendimentoView(PermissaoComRedirecionamentoMixin, View):
             'fatura'
         ).order_by('-data', '-pk')
 
-        status = request.GET.get('status')
+        if pesquisa:
+            atendimentos = atendimentos.filter(
+                Q(animal__nome__icontains=pesquisa) |
+                Q(animal__sobrenome__icontains=pesquisa) |
+                Q(animal__tutor__nome__icontains=pesquisa) |
+                Q(animal__tutor__sobrenome__icontains=pesquisa) |
+                Q(servico__nome__icontains=pesquisa) |
+                Q(funcionario__nome__icontains=pesquisa) |
+                Q(funcionario__sobrenome__icontains=pesquisa) |
+                Q(observacao__icontains=pesquisa)
+            )
 
         if status:
             atendimentos = atendimentos.filter(status=status)
 
         return render(request, 'atendimento.html', {
             'atendimentos': atendimentos,
+            'pesquisa': pesquisa,
             'status_selecionado': status,
             'status_opcoes': Atendimento.Status.choices
         })
@@ -1288,32 +1397,50 @@ class FaturaView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_fatura'
 
     def get(self, request):
-        faturas = Fatura.objects.select_related('cliente').annotate(
+        pesquisa = request.GET.get('q', '').strip()
+        status = request.GET.get('status', '')
+
+        faturas = Fatura.objects.select_related(
+            'cliente'
+        ).annotate(
             pago_calc=Coalesce(
-                Sum('pagamentos__valor', filter=Q(pagamentos__estornado=False)),
+                Sum(
+                    'pagamentos__valor',
+                    filter=Q(pagamentos__estornado=False)
+                ),
                 Value(Decimal('0.00')),
-                output_field=DecimalField(max_digits=10, decimal_places=2)
+                output_field=DecimalField(
+                    max_digits=10,
+                    decimal_places=2
+                )
             )
         ).order_by('-data_emissao', '-pk')
 
-        status = request.GET.get('status')
+        if pesquisa:
+            faturas = faturas.filter(
+                Q(cliente__nome__icontains=pesquisa) |
+                Q(cliente__sobrenome__icontains=pesquisa) |
+                Q(cliente__cpf__icontains=pesquisa)
+            )
+
         lista = []
 
-        for f in faturas:
-            f.saldo_calc = f.valor_final - f.pago_calc
+        for fatura in faturas:
+            fatura.saldo_calc = fatura.valor_final - fatura.pago_calc
 
-            if f.pago_calc <= 0:
-                f.status_calc = StatusPagamento.PENDENTE
-            elif f.saldo_calc <= 0:
-                f.status_calc = StatusPagamento.PAGO
+            if fatura.pago_calc <= 0:
+                fatura.status_calc = StatusPagamento.PENDENTE
+            elif fatura.saldo_calc <= 0:
+                fatura.status_calc = StatusPagamento.PAGO
             else:
-                f.status_calc = StatusPagamento.PARCIAL
+                fatura.status_calc = StatusPagamento.PARCIAL
 
-            if not status or f.status_calc == status:
-                lista.append(f)
+            if not status or fatura.status_calc == status:
+                lista.append(fatura)
 
         return render(request, 'fatura.html', {
             'faturas': lista,
+            'pesquisa': pesquisa,
             'status_selecionado': status,
             'status_opcoes': StatusPagamento.choices
         })
