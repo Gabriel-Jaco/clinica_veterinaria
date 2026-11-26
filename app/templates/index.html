@@ -422,30 +422,8 @@
             <a href="{% url 'fatura' %}">Faturas</a>
         {% endif %}
 
-        {% if perms.app.view_produto or perms.app.view_lote or perms.app.view_fornecedor or perms.app.view_servico %}
-            <details class="nav-dropdown">
-                <summary>Estoque</summary>
-
-                <div class="dropdown-content">
-
-                    {% if perms.app.view_produto %}
-                        <a href="{% url 'produto' %}">Produtos</a>
-                    {% endif %}
-
-                    {% if perms.app.view_lote %}
-                        <a href="{% url 'lote' %}">Lotes</a>
-                    {% endif %}
-
-                    {% if perms.app.view_fornecedor %}
-                        <a href="{% url 'fornecedor' %}">Fornecedores</a>
-                    {% endif %}
-
-                    {% if perms.app.view_servico %}
-                        <a href="{% url 'servico' %}">Serviços</a>
-                    {% endif %}
-
-                </div>
-            </details>
+        {% if perms.app.view_produto %}
+            <a href="{% url 'produto' %}">Estoque</a>
         {% endif %}
 
         {% if perms.app.view_funcionario %}

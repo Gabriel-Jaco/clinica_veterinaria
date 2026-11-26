@@ -315,10 +315,10 @@
     <nav>
         <a href="{% url 'index' %}">Início</a>
 
-        <a href="{% url 'cliente' %}" class="active">Clientes</a>
+        <a href="{% url 'cliente' %}">Clientes</a>
 
         {% if perms.app.view_animal %}
-            <a href="{% url 'animal' %}">Animais</a>
+            <a href="{% url 'animal' %}" class="active">Animais</a>
         {% endif %}
 
         {% if perms.app.view_atendimento %}
@@ -330,34 +330,14 @@
         {% endif %}
 
         {% if perms.app.view_produto %}
-            <div class="dropdown">
-                <span class="menu-label">Estoque ▾</span>
-                <div class="dropdown-content">
-                    <a href="{% url 'produto' %}">Produtos</a>
-
-                    {% if perms.app.view_lote %}
-                        <a href="{% url 'lote' %}">Lotes</a>
-                    {% endif %}
-
-                    {% if perms.app.view_fornecedor %}
-                        <a href="{% url 'fornecedor' %}">Fornecedores</a>
-                    {% endif %}
-
-                    {% if perms.app.view_servico %}
-                        <a href="{% url 'servico' %}">Serviços</a>
-                    {% endif %}
-                </div>
-            </div>
+            <a href="{% url 'produto' %}">Estoque</a>
         {% endif %}
 
         {% if perms.app.view_funcionario %}
             <a href="{% url 'funcionario' %}">Funcionários</a>
         {% endif %}
 
-        <form action="{% url 'logout' %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="logout">Sair</button>
-        </form>
+        <a href="{% url 'logout' %}" class="logout">Sair</a>
     </nav>
 </header>
 

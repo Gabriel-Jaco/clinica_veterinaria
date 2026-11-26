@@ -340,24 +340,7 @@
         {% endif %}
 
         {% if perms.app.view_produto %}
-            <div class="dropdown">
-                <span class="menu-label">Estoque ▾</span>
-                <div class="dropdown-content">
-                    <a href="{% url 'produto' %}">Produtos</a>
-
-                    {% if perms.app.view_lote %}
-                        <a href="{% url 'lote' %}">Lotes</a>
-                    {% endif %}
-
-                    {% if perms.app.view_fornecedor %}
-                        <a href="{% url 'fornecedor' %}">Fornecedores</a>
-                    {% endif %}
-
-                    {% if perms.app.view_servico %}
-                        <a href="{% url 'servico' %}">Serviços</a>
-                    {% endif %}
-                </div>
-            </div>
+            <a href="{% url 'produto' %}">Estoque</a>
         {% endif %}
 
         {% if perms.app.view_funcionario %}

@@ -418,9 +418,24 @@ class ClienteView(LoginRequiredMixin, View):
 class FuncionarioView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_funcionario'
 
-    def get(self, request, *args, **kwargs):
-        funcionarios = Funcionario.objects.all()
-        return render(request, "funcionario.html", {"funcionarios": funcionarios})
+    def get(self, request):
+        pesquisa = request.GET.get('q', '').strip()
+
+        funcionarios = Funcionario.objects.all().order_by('nome')
+
+        if pesquisa:
+            funcionarios = funcionarios.filter(
+                Q(nome__icontains=pesquisa) |
+                Q(sobrenome__icontains=pesquisa) |
+                Q(cpf__icontains=pesquisa) |
+                Q(email__icontains=pesquisa)
+            )
+
+        return render(request, 'funcionario.html', {
+            'funcionarios': funcionarios,
+            'pesquisa': pesquisa
+        })
+
 
 
 
@@ -692,12 +707,25 @@ class RacaView(PermissaoComRedirecionamentoMixin, View):
 class FornecedorView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_fornecedor'
 
+    
     def get(self, request):
-        fornecedores = Fornecedor.objects.all()
+        pesquisa = request.GET.get('q', '').strip()
+
+        fornecedores = Fornecedor.objects.all().order_by('nome')
+
+        if pesquisa:
+            fornecedores = fornecedores.filter(
+                Q(nome__icontains=pesquisa) |
+                Q(cnpj__icontains=pesquisa) |
+                Q(contato__icontains=pesquisa) |
+                Q(email__icontains=pesquisa)
+            )
 
         return render(request, 'fornecedor.html', {
-            'fornecedores': fornecedores
+            'fornecedores': fornecedores,
+            'pesquisa': pesquisa
         })
+
 
 
 class FornecedorCreateView(PermissaoComRedirecionamentoMixin, View):
@@ -786,10 +814,19 @@ class ProdutoView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_produto'
 
     def get(self, request):
+        pesquisa = request.GET.get('q', '').strip()
+
         produtos = Produto.objects.all().order_by('nome')
 
+        if pesquisa:
+            produtos = produtos.filter(
+                Q(nome__icontains=pesquisa) |
+                Q(unidade__icontains=pesquisa)
+            )
+
         return render(request, 'produto.html', {
-            'produtos': produtos
+            'produtos': produtos,
+            'pesquisa': pesquisa
         })
 class ProdutoCreateView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.add_produto'
@@ -907,19 +944,29 @@ class LoteView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_lote'
 
     def get(self, request):
+        pesquisa = request.GET.get('q', '').strip()
+        produto_id = request.GET.get('produto', '')
+
         lotes = Lote.objects.select_related(
             'produto',
             'fornecedor'
         ).all().order_by('data_validade')
 
-        produto_id = request.GET.get('produto')
+        if pesquisa:
+            lotes = lotes.filter(
+                Q(numero__icontains=pesquisa) |
+                Q(produto__nome__icontains=pesquisa) |
+                Q(fornecedor__nome__icontains=pesquisa)
+            )
 
         if produto_id:
             lotes = lotes.filter(produto_id=produto_id)
 
         return render(request, 'lote.html', {
             'lotes': lotes,
-            'produto_id': produto_id
+            'produtos': Produto.objects.all().order_by('nome'),
+            'produto_id': produto_id,
+            'pesquisa': pesquisa
         })
 class LoteCreateView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.add_lote'
@@ -1285,12 +1332,22 @@ class AtendimentoCancelView(PermissaoComRedirecionamentoMixin, View):
 class ServicoView(PermissaoComRedirecionamentoMixin, View):
     permission_required = 'app.view_servico'
 
+    
     def get(self, request):
+        pesquisa = request.GET.get('q', '').strip()
+
         servicos = Servico.objects.all().order_by('nome')
 
+        if pesquisa:
+            servicos = servicos.filter(
+                nome__icontains=pesquisa
+            )
+
         return render(request, 'servico.html', {
-            'servicos': servicos
+            'servicos': servicos,
+            'pesquisa': pesquisa
         })
+
 
 
 class ServicoCreateView(PermissaoComRedirecionamentoMixin, View):
