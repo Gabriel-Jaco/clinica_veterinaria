@@ -1,126 +1,47 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login - Clínica Veterinária</title>
-        <style>
-            :root {
-                --primary-color: #0d9488; /* Verde-água profissional */
-                --primary-hover: #0f766e;
-                --bg-color: #f0fdf4; /* Tom levemente esverdeado e suave */
-                --card-bg: #ffffff;
-                --text-color: #1f2937;
-                --border-color: #d1d5db;
-            }
+{% extends "base.html" %}
 
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: var(--bg-color);
-                color: var(--text-color);
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-            }
+{% block title %}Entrar{% endblock %}
 
-            .login-card {
-                background: var(--card-bg);
-                padding: 2.5rem;
-                border-radius: 1rem;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-                width: 100%;
-                max-width: 400px;
-                text-align: center;
-                border-top: 5px solid var(--primary-color);
-            }
+{% block body %}
+<main class="login">
+    <section class="login__art">
+        <span class="brand">
+            <span class="brand__mark">{% include "partials/icon.html" with n="paw-print" %}</span>
+            <span><span class="brand__name">VetSystem</span><span class="brand__sub">Clínica veterinária</span></span>
+        </span>
 
-            h1 {
-                margin-top: 0;
-                color: var(--text-color);
-                font-size: 1.75rem;
-                margin-bottom: 0.25rem;
-            }
+        <div>
+            <h1 class="login__headline">Cada paciente bem cuidado, do cadastro à alta.</h1>
+            <p>Atendimentos, tutores, estoque e faturas da clínica reunidos em um só lugar.</p>
+        </div>
 
-            .subtitle {
-                color: #6b7280;
-                font-size: 0.95rem;
-                margin-bottom: 1.5rem;
-            }
+        <div class="mosaic" aria-hidden="true">
+            <span>{% include "partials/icon.html" with n="dog" %}</span><span>{% include "partials/icon.html" with n="cat" %}</span><span>{% include "partials/icon.html" with n="rabbit" %}</span><span>{% include "partials/icon.html" with n="paw-print" %}</span>
+            <span>{% include "partials/icon.html" with n="bird" %}</span><span>{% include "partials/icon.html" with n="fish" %}</span><span>{% include "partials/icon.html" with n="stethoscope" %}</span><span>{% include "partials/icon.html" with n="turtle" %}</span>
+        </div>
+    </section>
 
-            /* Estilização para os parágrafos gerados pelo {{ form.as_p }} do Django */
-            form p {
-                margin-bottom: 1.25rem;
-                text-align: left;
-            }
+    <section class="login__main">
+        <div class="login__box">
+            <h2>Entrar no sistema</h2>
+            <p>Use o usuário e a senha cadastrados pela clínica.</p>
 
-            form label {
-                display: block;
-                font-weight: 600;
-                margin-bottom: 0.35rem;
-                color: var(--text-color);
-                font-size: 0.9rem;
-            }
+            {% include "partials/messages.html" %}
 
-            form input {
-                width: 100%;
-                padding: 0.75rem;
-                border: 1px solid var(--border-color);
-                border-radius: 0.5rem;
-                font-size: 1rem;
-                box-sizing: border-box;
-                transition: border-color 0.2s, box-shadow 0.2s;
-            }
+            {% if form.non_field_errors %}
+            <div class="alert alert--error" role="alert">
+                {% include "partials/icon.html" with n="circle-alert" %}
+                <div class="alert__text">{% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}</div>
+            </div>
+            {% endif %}
 
-            form input:focus {
-                outline: none;
-                border-color: var(--primary-color);
-                box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
-            }
-
-            /* Estilização de mensagens de erro globais ou de campo do Django se houver */
-            .errorlist {
-                color: #e11d48;
-                font-size: 0.85rem;
-                padding-left: 0;
-                list-style: none;
-                margin: 0.25rem 0 0 0;
-            }
-
-            button[type="submit"] {
-                display: block;
-                width: 100%;
-                padding: 0.75rem 1rem;
-                border-radius: 0.5rem;
-                font-size: 1rem;
-                font-weight: 600;
-                text-decoration: none;
-                cursor: pointer;
-                border: none;
-                background-color: var(--primary-color);
-                color: white;
-                transition: background-color 0.2s, transform 0.1s;
-                box-sizing: border-box;
-                margin-top: 1.5rem;
-            }
-
-            button[type="submit"]:hover {
-                background-color: var(--primary-hover);
-            }
-        </style>
-    </head>
-    <body>
-        <div class="login-card">
-            <h1>🐾 VetSystem</h1>
-            <p class="subtitle">Faça login para acessar o sistema</p>
-            
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Entrar</button>
+                {% include "partials/field.html" with field=form.username label="Usuário" icon="user" %}
+                {% include "partials/password_field.html" with field=form.password label="Senha" %}
+                <button type="submit" class="btn btn--primary btn--block">{% include "partials/icon.html" with n="log-in" %}Entrar</button>
             </form>
         </div>
-    </body>
-</html>
+    </section>
+</main>
+{% endblock %}

@@ -1,209 +1,56 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Raças - Clínica Veterinária</title>
+{% block title %}Raças{% endblock %}
 
-    <style>
-        :root {
-            --primary-color: #0d9488;
-            --primary-hover: #0f766e;
-            --bg-color: #f0fdf4;
-            --card-bg: #ffffff;
-            --text-color: #1f2937;
-            --border-color: #e5e7eb;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-        }
-
-        .header-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        h1 {
-            color: var(--text-color);
-            font-size: 2rem;
-            margin: 0;
-        }
-
-        a.btn-voltar {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background-color: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        a.btn-voltar:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .table-card {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            border-top: 5px solid var(--primary-color);
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table.table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            white-space: nowrap;
-        }
-
-        table.table th {
-            background-color: #f8fafc;
-            color: #475569;
-            font-weight: 600;
-            padding: 1rem 1.25rem;
-            font-size: 0.9rem;
-            border-bottom: 2px solid var(--border-color);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        table.table td {
-            padding: 1rem 1.25rem;
-            color: var(--text-color);
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.95rem;
-        }
-
-        table.table tbody tr {
-            transition: background-color 0.15s ease;
-        }
-
-        table.table tbody tr:hover {
-            background-color: #f0fdf4;
-        }
-
-        table.table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .acoes a {
-            color: var(--primary-color);
-            font-weight: 600;
-            text-decoration: none;
-            margin-right: 10px;
-        }
-
-        .acoes a:hover {
-            color: var(--primary-hover);
-            text-decoration: underline;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-
-        <div class="header-nav">
-
-            <h1>🐾 Lista de Raças</h1>
-
-            <a class="btn-voltar" href="{% url 'animal' %}">
-                ← Voltar
-            </a>
-
-            <a class="btn-voltar" href="{% url 'cadastro_raca' %}">
-                + Cadastrar raça
-            </a>
-
+{% block content %}
+<header class="page-head">
+    <div class="page-head__text">
+        <div class="page-head__title">
+            <h1>Raças</h1>
+            <span class="count">{{ racas|length }} registro{{ racas|length|pluralize }}</span>
         </div>
-
-        <div class="table-card">
-
-            <div class="table-responsive">
-
-                <table class="table">
-
-                    <thead>
-                        <tr>
-                            <th>Raça</th>
-                            <th>Espécie</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        {% for raca in racas %}
-
-                        <tr>
-
-                            <td>
-                                <strong>{{ raca.nome }}</strong>
-                            </td>
-
-                            <td>
-                                {{ raca.especie.nome }}
-                            </td>
-
-                            <td class="acoes">
-
-                                <a href="{% url 'excluir_raca' raca.pk %}">
-                                    Excluir
-                                </a>
-
-                            </td>
-
-                        </tr>
-
-                        {% empty %}
-
-                        <tr>
-                            <td colspan="3">
-                                Nenhuma raça cadastrada.
-                            </td>
-                        </tr>
-
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
+        <p>Raças disponíveis no cadastro de animais.</p>
     </div>
+    <div class="page-actions">
+        {% if perms.app.view_animal %}<a class="btn btn--secondary" href="{% url 'animal' %}">{% include "partials/icon.html" with n="paw-print" %}Ver animais</a>{% endif %}
+        {% if perms.app.add_raca %}<a class="btn btn--primary" href="{% url 'cadastro_raca' %}">{% include "partials/icon.html" with n="plus" %}Cadastrar raça</a>{% endif %}
+    </div>
+</header>
 
-</body>
-</html>
+<section class="panel">
+    {% if racas %}
+    <div class="table-wrap">
+        <table class="table table--stack">
+            <thead>
+                <tr><th>Raça</th><th>Espécie</th><th class="col-actions">Ações</th></tr>
+            </thead>
+            <tbody>
+                {% for raca in racas %}
+                <tr>
+                    <td class="cell-main">
+                        <span class="identity">
+                            {% include "partials/species.html" with especie=raca.especie.nome %}
+                            <span class="identity__name">{{ raca.nome }}</span>
+                        </span>
+                    </td>
+                    <td data-label="Espécie">{{ raca.especie.nome }}</td>
+                    <td class="col-actions">
+                        <div class="row-actions">
+                            {% if perms.app.delete_raca %}<a class="icon-btn icon-btn--danger" href="{% url 'excluir_raca' raca.pk %}" aria-label="Excluir {{ raca.nome }}" data-tip="Excluir">{% include "partials/icon.html" with n="trash-2" %}<span class="icon-btn__text">Excluir</span></a>{% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        {% if perms.app.add_raca %}
+            {% url 'cadastro_raca' as novo_url %}
+            {% include "partials/empty.html" with icon="tags" title="Nenhuma raça cadastrada" text="Cadastre as raças para poder registrar animais." action_url=novo_url action_icon="plus" action_text="Cadastrar raça" %}
+        {% else %}
+            {% include "partials/empty.html" with icon="tags" title="Nenhuma raça cadastrada" text="Cadastre as raças para poder registrar animais." %}
+        {% endif %}
+    {% endif %}
+</section>
+{% endblock %}

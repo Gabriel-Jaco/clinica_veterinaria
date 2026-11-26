@@ -1,0 +1,10 @@
+{% if form.errors %}
+<div class="form-errors">
+    <div class="alert alert--error" role="alert">
+        {% include "partials/icon.html" with n="circle-alert" %}
+        <div class="alert__text">
+            {% if form.non_field_errors %}{% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}{% else %}<p>Não foi possível salvar. Corrija os campos destacados.</p>{% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}

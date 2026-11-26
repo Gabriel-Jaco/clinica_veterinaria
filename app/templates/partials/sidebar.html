@@ -1,0 +1,63 @@
+<aside class="sidebar" id="menu">
+    <div class="sidebar__top">
+        <a class="brand" href="{% url 'index' %}">
+            <span class="brand__mark">{% include "partials/icon.html" with n="paw-print" %}</span>
+            <span><span class="brand__name">VetSystem</span><span class="brand__sub">Clínica veterinária</span></span>
+        </a>
+        <button type="button" class="sidebar__close" data-menu-close aria-label="Fechar menu">{% include "partials/icon.html" with n="x" %}</button>
+    </div>
+
+    {% if perms.app.add_atendimento %}
+    <a class="btn btn--accent btn--block" href="{% url 'atendimento_cadastro' %}">{% include "partials/icon.html" with n="plus" %}Novo atendimento</a>
+    {% endif %}
+
+    <nav class="nav" aria-label="Menu principal">
+        <ul>
+            <li><a class="nav__link" href="{% url 'index' %}" {% if "/index/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="house" %}Início</a></li>
+        </ul>
+
+        {% if perms.app.view_atendimento or perms.app.view_fatura or perms.app.view_servico %}
+        <div class="nav__group">
+            <p class="nav__title">Atendimento</p>
+            <ul>
+                {% if perms.app.view_atendimento %}<li><a class="nav__link" href="{% url 'atendimento' %}" {% if "/atendimento/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="stethoscope" %}Atendimentos</a></li>{% endif %}
+                {% if perms.app.view_fatura %}<li><a class="nav__link" href="{% url 'fatura' %}" {% if "/fatura/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="receipt-text" %}Faturas</a></li>{% endif %}
+                {% if perms.app.view_servico %}<li><a class="nav__link" href="{% url 'servico' %}" {% if "/servico/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="clipboard-list" %}Serviços</a></li>{% endif %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="nav__group">
+            <p class="nav__title">Cadastros</p>
+            <ul>
+                <li><a class="nav__link" href="{% url 'cliente' %}" {% if "/cliente/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="users" %}Clientes</a></li>
+                {% if perms.app.view_animal %}<li><a class="nav__link" href="{% url 'animal' %}" {% if "/animal/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="paw-print" %}Animais</a></li>{% endif %}
+                {% if perms.app.view_raca %}<li><a class="nav__link" href="{% url 'raca' %}" {% if "/raca/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="tags" %}Raças</a></li>{% endif %}
+                {% if perms.app.view_funcionario %}<li><a class="nav__link" href="{% url 'funcionario' %}" {% if "/funcionario/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="id-card" %}Funcionários</a></li>{% endif %}
+            </ul>
+        </div>
+
+        {% if perms.app.view_produto or perms.app.view_lote or perms.app.view_fornecedor %}
+        <div class="nav__group">
+            <p class="nav__title">Estoque</p>
+            <ul>
+                {% if perms.app.view_produto %}<li><a class="nav__link" href="{% url 'produto' %}" {% if "/produto/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="package" %}Produtos</a></li>{% endif %}
+                {% if perms.app.view_lote %}<li><a class="nav__link" href="{% url 'lote' %}" {% if "/lote/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="boxes" %}Lotes</a></li>{% endif %}
+                {% if perms.app.view_fornecedor %}<li><a class="nav__link" href="{% url 'fornecedor' %}" {% if "/fornecedor/" in request.path %}aria-current="page"{% endif %}>{% include "partials/icon.html" with n="truck" %}Fornecedores</a></li>{% endif %}
+            </ul>
+        </div>
+        {% endif %}
+    </nav>
+
+    <div class="account">
+        <span class="account__avatar" aria-hidden="true">{% if user.funcionario %}{{ user.funcionario.nome|slice:":1" }}{% else %}{{ user.username|slice:":1" }}{% endif %}</span>
+        <span class="account__info">
+            <span class="account__name">{% if user.funcionario %}{{ user.funcionario.nome }}{% else %}{{ user.get_full_name|default:user.username }}{% endif %}</span>
+            <span class="account__role">{% if user.groups.all %}{{ user.groups.all.0.name }}{% elif user.is_superuser %}Administrador{% else %}Sem grupo{% endif %}</span>
+        </span>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="account__logout">{% include "partials/icon.html" with n="log-out" %}Sair</button>
+        </form>
+    </div>
+</aside>

@@ -1,0 +1,5 @@
+<div class="field {{ cls }}{% if field.errors %} field--invalid{% endif %}">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    <input type="date" name="{{ field.html_name }}" id="{{ field.id_for_label }}" value="{% if field.form.is_bound %}{{ field.value|default_if_none:'' }}{% else %}{{ field.value|date:'Y-m-d' }}{% endif %}" {% if field.field.required %}required{% endif %} {% if field.errors %}aria-invalid="true"{% endif %}>
+    {% for error in field.errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+</div>

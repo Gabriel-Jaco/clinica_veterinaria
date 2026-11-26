@@ -1,0 +1,52 @@
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Dados pessoais</h2>
+            <p>Identificação e contato do funcionário.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.nome cls="field--half" %}
+            {% include "partials/field.html" with field=form.sobrenome cls="field--half" %}
+            {% include "partials/field.html" with field=form.cpf cls="field--half" icon="id-card" hint="Formato: 000.000.000-00" %}
+            {% include "partials/date_field.html" with field=form.data_nascimento cls="field--half" %}
+            {% include "partials/field.html" with field=form.contato cls="field--half" icon="phone" %}
+            {% include "partials/field.html" with field=form.email cls="field--half" icon="mail" %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Função</h2>
+            <p>O que essa pessoa faz na clínica.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.descricao %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Endereço</h2>
+            <p>Rua, número, bairro e cidade.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.rua cls="field--two-thirds" icon="map-pin" %}
+            {% include "partials/field.html" with field=form.numero cls="field--third" %}
+            {% include "partials/field.html" with field=form.bairro cls="field--half" %}
+            {% include "partials/field.html" with field=form.cidade cls="field--half" %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Acesso ao sistema</h2>
+            <p>Usuário, permissões e senha.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.username cls="field--half" icon="user" %}
+            {% include "partials/field.html" with field=form.grupo cls="field--half" icon="shield-check" hint="Define o que a pessoa pode ver e fazer." %}
+            {% if funcionario %}
+            {% include "partials/password_field.html" with field=form.password1 cls="field--half" hint="Deixe em branco para manter a atual." label="Nova senha" %}
+            {% include "partials/password_field.html" with field=form.password2 cls="field--half" label="Confirme a nova senha" %}
+            {% else %}
+            {% include "partials/password_field.html" with field=form.password1 cls="field--half" hint="Use ao menos 8 caracteres, misturando letras e números." %}
+            {% include "partials/password_field.html" with field=form.password2 cls="field--half" %}
+            {% endif %}
+        </div>
+    </div>

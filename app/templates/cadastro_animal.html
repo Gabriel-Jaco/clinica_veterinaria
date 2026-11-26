@@ -1,146 +1,25 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Animal - Clínica Veterinária</title>
+{% block title %}Cadastrar animal{% endblock %}
+{% block content_class %}content--narrow{% endblock %}
 
-    <style>
-        :root {
-            --primary-color: #0d9488;
-            --primary-hover: #0f766e;
-            --bg-color: #f0fdf4;
-            --card-bg: #ffffff;
-            --text-color: #1f2937;
-            --border-color: #e5e7eb;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .header-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin: 0;
-        }
-
-        .btn-voltar {
-            background-color: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .btn-voltar:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .form-card {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            border-top: 5px solid var(--primary-color);
-        }
-
-        .form-card p {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-card label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-card input,
-        .form-card select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-
-        .form-card input:focus,
-        .form-card select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        .btn-cadastrar {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-cadastrar:hover {
-            background-color: var(--primary-hover);
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-
-        <div class="header-nav">
-            <h1>🐾 Cadastrar Animal</h1>
-
-            <a class="btn-voltar" href="{% url 'animal' %}">
-                ← Voltar
-            </a>
-        </div>
-
-        <div class="form-card">
-
-            <form method="POST">
-
-                {% csrf_token %}
-
-                {{ form.as_p }}
-
-                <button type="submit" class="btn-cadastrar">
-                    Cadastrar Animal
-                </button>
-
-            </form>
-
-        </div>
-
+{% block content %}
+<header class="page-head">
+    <div class="page-head__text">
+        <a class="back" href="{% url 'animal' %}">{% include "partials/icon.html" with n="arrow-left" %}Animais</a>
+        <h1>Cadastrar animal</h1>
     </div>
+</header>
 
-</body>
-</html>
+<form method="post" class="panel">
+    {% csrf_token %}
+    {% include "partials/form_errors.html" %}
+
+    {% include "forms/animal.html" %}
+
+    <div class="form-actions">
+        <a class="btn btn--secondary" href="{% url 'animal' %}">Cancelar</a>
+        <button type="submit" class="btn btn--primary">{% include "partials/icon.html" with n="check" %}Cadastrar animal</button>
+    </div>
+</form>
+{% endblock %}

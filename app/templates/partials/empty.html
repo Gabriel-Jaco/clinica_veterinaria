@@ -1,0 +1,6 @@
+<div class="empty">
+    <span class="empty__icon">{% include "partials/icon.html" with n=icon %}</span>
+    <h2>{{ title }}</h2>
+    <p>{{ text }}</p>
+    {% if action_url %}<a class="btn {{ action_style|default:'btn--primary' }}" href="{{ action_url }}">{% include "partials/icon.html" with n=action_icon %}{{ action_text }}</a>{% endif %}
+</div>

@@ -1,101 +1,19 @@
+{% extends "confirmacao.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excluir Cliente</title>
+{% block title %}Excluir funcionário{% endblock %}
+{% block heading %}Excluir funcionário?{% endblock %}
 
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0fdf4;
-            color: #1f2937;
-            margin: 0;
-            padding: 2rem;
-        }
+{% block details %}
+            <dl class="summary">
+                <div><dt>Nome</dt><dd>{{ funcionario.nome }} {{ funcionario.sobrenome }}</dd></div>
+                <div><dt>CPF</dt><dd>{{ funcionario.cpf }}</dd></div>
+                <div><dt>Contato</dt><dd>{{ funcionario.contato }}</dd></div>
+                <div><dt>Nascimento</dt><dd>{{ funcionario.data_nascimento|date:"d/m/Y" }}</dd></div>
+                <div><dt>Endereço</dt><dd>{{ funcionario.endereco.rua }}, {{ funcionario.endereco.numero }} - {{ funcionario.endereco.bairro }}</dd></div>
+                <div><dt>Cidade</dt><dd>{{ funcionario.endereco.cidade.cidade }} - {{ funcionario.endereco.cidade.uf }}</dd></div>
+            </dl>
+{% endblock %}
 
-        .container {
-            max-width: 650px;
-            margin: auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            border-top: 5px solid #dc2626;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-
-        h1 {
-            margin-top: 0;
-        }
-
-        .dados {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin: 1rem 0;
-        }
-
-        .dados p {
-            margin: 0.7rem 0;
-        }
-
-        button, .voltar {
-            padding: 0.7rem 1rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        button {
-            background: #dc2626;
-            color: white;
-            border: none;
-        }
-
-        .voltar {
-            color: #0d9488;
-            border: 1px solid #0d9488;
-            margin-left: 0.5rem;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <h1>🗑️ Excluir Funcionário</h1>
-
-        <p>Tem certeza de que deseja excluir este funcionário?</p>
-
-        <div class="dados">
-            <p><strong>Nome:</strong> {{ funcionario.nome }}</p>
-            <p><strong>Sobrenome:</strong> {{ funcionario.sobrenome }}</p>
-            <p><strong>CPF:</strong> {{ funcionario.cpf }}</p>
-            <p><strong>Contato:</strong> {{ funcionario.contato }}</p>
-            <p><strong>Data de nascimento:</strong> {{ funcionario.data_nascimento }}</p>
-            <p><strong>Gênero:</strong> {{ funcionario.genero }}</p>
-
-            <hr>
-
-            <h3>Endereço</h3>
-
-            <p><strong>Rua:</strong> {{ funcionario.endereco.rua }}</p>
-            <p><strong>Número:</strong> {{ funcionario.endereco.numero }}</p>
-            <p><strong>Bairro:</strong> {{ funcionario.endereco.bairro }}</p>
-            <p><strong>Cidade:</strong> {{ funcionario.endereco.cidade.cidade }}</p>
-            <p><strong>UF:</strong> {{ funcionario.endereco.cidade.uf }}</p>
-        </div>
-
-        <form method="post">
-            {% csrf_token %}
-
-            <button type="submit">Confirmar exclusão</button>
-
-            <a class="voltar" href="{% url 'funcionario' %}">
-                Cancelar
-            </a>
-        </form>
-    </div>
-</body>
-</html>
+{% block warning %}O usuário de acesso também será excluído. Funcionários com atendimentos ou pagamentos vinculados não podem ser excluídos.{% endblock %}
+{% block back_url %}{% url 'funcionario' %}{% endblock %}
+{% block submit_text %}Excluir funcionário{% endblock %}

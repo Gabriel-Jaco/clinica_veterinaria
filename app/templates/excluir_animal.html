@@ -1,126 +1,16 @@
+{% extends "confirmacao.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excluir Animal - Clínica Veterinária</title>
+{% block title %}Excluir animal{% endblock %}
+{% block heading %}Excluir animal?{% endblock %}
 
-    <style>
-        :root {
-            --primary-color: #0d9488;
-            --primary-hover: #0f766e;
-            --bg-color: #f0fdf4;
-            --card-bg: #ffffff;
-            --text-color: #1f2937;
-            --border-color: #e5e7eb;
-            --danger-color: #dc2626;
-        }
+{% block details %}
+            <dl class="summary">
+                <div><dt>Nome</dt><dd>{{ animal.nome }} {{ animal.sobrenome|default:'' }}</dd></div>
+                <div><dt>Espécie e raça</dt><dd>{{ animal.raca.especie.nome }}, {{ animal.raca.nome }}</dd></div>
+                <div><dt>Tutor</dt><dd>{{ animal.tutor.nome }} {{ animal.tutor.sobrenome }}</dd></div>
+            </dl>
+{% endblock %}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .delete-card {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            border-top: 5px solid var(--danger-color);
-            text-align: center;
-        }
-
-        h1 {
-            color: var(--text-color);
-            font-size: 1.8rem;
-        }
-
-        p {
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-
-        .btn-excluir {
-            background-color: var(--danger-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-right: 0.5rem;
-        }
-
-        .btn-excluir:hover {
-            background-color: #b91c1c;
-        }
-
-        .btn-cancelar {
-            display: inline-block;
-            background-color: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            padding: 0.7rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .btn-cancelar:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-
-        <div class="delete-card">
-
-            <h1>⚠️ Excluir Animal</h1>
-
-            <p>
-                Tem certeza de que deseja excluir o animal
-                <strong>{{ animal.nome }} {{ animal.sobrenome }}</strong>?
-            </p>
-
-            <p>Essa ação não poderá ser desfeita.</p>
-
-            <form method="POST">
-
-                {% csrf_token %}
-
-                <button type="submit" class="btn-excluir">
-                    Confirmar Exclusão
-                </button>
-
-                <a class="btn-cancelar" href="{% url 'animal' %}">
-                    Cancelar
-                </a>
-
-            </form>
-
-        </div>
-
-    </div>
-
-</body>
-</html>
+{% block warning %}Animais com atendimentos vinculados não podem ser excluídos.{% endblock %}
+{% block back_url %}{% url 'animal' %}{% endblock %}
+{% block submit_text %}Excluir animal{% endblock %}

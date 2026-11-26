@@ -1,0 +1,105 @@
+<form method="post" class="panel">
+    {% csrf_token %}
+
+    {% if form.errors or formset.total_error_count %}
+    <div class="form-errors">
+        <div class="alert alert--error" role="alert">
+            {% include "partials/icon.html" with n="circle-alert" %}
+            <div class="alert__text">
+                {% if form.non_field_errors or formset.non_form_errors %}
+                    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                    {% for error in formset.non_form_errors %}<p>{{ error }}</p>{% endfor %}
+                {% else %}<p>Não foi possível salvar. Corrija os campos destacados.</p>{% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Paciente e serviço</h2>
+            <p>Quem será atendido, o que será feito e por quem.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.animal icon="paw-print" label="Animal" %}
+            {% include "partials/field.html" with field=form.servico cls="field--half" icon="clipboard-list" %}
+            {% include "partials/field.html" with field=form.funcionario cls="field--half" icon="user" label="Funcionário responsável" %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Andamento</h2>
+            <p>Para faturar depois, o status precisa ser Concluído.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.data cls="field--half" %}
+            <div class="field field--half{% if form.status.errors %} field--invalid{% endif %}">
+                <label for="{{ form.status.id_for_label }}">Status</label>
+                <select name="{{ form.status.html_name }}" id="{{ form.status.id_for_label }}" required>
+                    {% for valor, nome in form.status.field.choices %}{% if valor != "cancelado" %}<option value="{{ valor }}" {% if form.status.value == valor %}selected{% endif %}>{{ nome }}</option>{% endif %}{% endfor %}
+                </select>
+                {% for error in form.status.errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+            </div>
+            {% include "partials/field.html" with field=form.observacao %}
+        </div>
+    </div>
+    <div class="form-section" data-formset="{{ formset.prefix }}">
+        <div class="form-section__head">
+            <h2>Materiais utilizados</h2>
+            <p>Só aparecem lotes com saldo e dentro da validade. Materiais removidos voltam ao estoque do lote.</p>
+        </div>
+        <div>
+            {{ formset.management_form }}
+            <ul class="items" data-formset-list>
+                {% for f in formset %}
+                <li class="item-row">
+                    {% for hidden in f.hidden_fields %}{{ hidden }}{% endfor %}
+                    <div class="item-row__field">
+                        <label for="{{ f.lote.id_for_label }}">Lote utilizado</label>
+                        {{ f.lote }}
+                        {% for error in f.lote.errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+                    </div>
+                    <div class="item-row__field">
+                        <label for="{{ f.quantidade.id_for_label }}">Quantidade</label>
+                        {{ f.quantidade }}
+                        {% for error in f.quantidade.errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+                    </div>
+                    <div class="item-row__end">
+                        <label class="item-row__delete">{{ f.DELETE }} Remover</label>
+                        <button type="button" class="icon-btn icon-btn--danger item-row__button" data-formset-remove>{% include "partials/icon.html" with n="trash-2" %}<span class="icon-btn__text">Remover</span></button>
+                    </div>
+                    <p class="item-row__status" role="status">Este material sai do atendimento quando você salvar.</p>
+                    {% for error in f.non_field_errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+                </li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn btn--secondary" data-formset-add hidden>{% include "partials/icon.html" with n="plus" %}Adicionar material</button>
+            <template>
+                <li class="item-row">
+                    {% for hidden in formset.empty_form.hidden_fields %}{{ hidden }}{% endfor %}
+                    <div class="item-row__field">
+                        <label for="{{ formset.empty_form.lote.id_for_label }}">Lote utilizado</label>
+                        {{ formset.empty_form.lote }}
+                        {% for error in formset.empty_form.lote.errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+                    </div>
+                    <div class="item-row__field">
+                        <label for="{{ formset.empty_form.quantidade.id_for_label }}">Quantidade</label>
+                        {{ formset.empty_form.quantidade }}
+                        {% for error in formset.empty_form.quantidade.errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+                    </div>
+                    <div class="item-row__end">
+                        <label class="item-row__delete">{{ formset.empty_form.DELETE }} Remover</label>
+                        <button type="button" class="icon-btn icon-btn--danger item-row__button" data-formset-remove>{% include "partials/icon.html" with n="trash-2" %}<span class="icon-btn__text">Remover</span></button>
+                    </div>
+                    <p class="item-row__status" role="status">Este material sai do atendimento quando você salvar.</p>
+                    {% for error in formset.empty_form.non_field_errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+                </li>
+            </template>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <a class="btn btn--secondary" href="{{ voltar }}">Voltar sem salvar</a>
+        <button type="submit" class="btn btn--primary">{% include "partials/icon.html" with n="save" %}{{ salvar }}</button>
+    </div>
+</form>

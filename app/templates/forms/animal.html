@@ -1,0 +1,31 @@
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Identificação</h2>
+            <p>Nome, raça e documento do animal.{% if perms.app.add_raca %} Não achou a raça? <a href="{% url 'cadastro_raca' %}">Cadastrar raça</a>.{% endif %}</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.nome cls="field--half" label="Nome" %}
+            {% include "partials/field.html" with field=form.sobrenome cls="field--half" label="Sobrenome" %}
+            {% include "partials/field.html" with field=form.raca cls="field--half" icon="paw-print" %}
+            {% include "partials/field.html" with field=form.rg cls="field--half" label="RG do animal" %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Dados clínicos</h2>
+            <p>Idade e peso atuais.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.data_nasc cls="field--half" label="Data de nascimento" %}
+            {% include "partials/field.html" with field=form.peso cls="field--half" label="Peso (kg)" %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Tutor</h2>
+            <p>Cliente responsável.{% if perms.app.add_cliente %} Ainda não cadastrado? <a href="{% url 'cadastro_cliente' %}">Cadastrar cliente</a>.{% endif %}</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.tutor icon="user" %}
+        </div>
+    </div>

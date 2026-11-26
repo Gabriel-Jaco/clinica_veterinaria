@@ -1,42 +1,15 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Excluir serviço</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
-        .container { max-width: 520px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-        h1 { margin-top: 0; font-size: 22px; }
-        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
-        .btn-sec { background: #6b7280; }
-        .btn-perigo { background: #dc2626; }
-        .acoes { margin-top: 24px; display: flex; gap: 8px; }
-        .resumo { background: #f9fafb; border-radius: 6px; padding: 12px 16px; font-size: 14px; line-height: 1.7; }
-        .aviso { background: #fef3c7; border-radius: 6px; padding: 10px 14px; margin-top: 16px; font-size: 14px; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1>Excluir serviço?</h1>
+{% extends "confirmacao.html" %}
 
-    <div class="resumo">
-        <div><strong>Nome:</strong> {{ servico.nome }}</div>
-        <div><strong>Valor:</strong> R$ {{ servico.valor|floatformat:2 }}</div>
-    </div>
+{% block title %}Excluir serviço{% endblock %}
+{% block heading %}Excluir serviço?{% endblock %}
 
-    <div class="aviso">
-        Esta ação não pode ser desfeita. Serviços que já foram usados em atendimentos não podem ser excluídos.
-    </div>
+{% block details %}
+            <dl class="summary">
+                <div><dt>Nome</dt><dd>{{ servico.nome }}</dd></div>
+                <div><dt>Valor</dt><dd>R$&nbsp;{{ servico.valor|floatformat:"2g" }}</dd></div>
+            </dl>
+{% endblock %}
 
-    <form method="post" action="{% url 'servico_excluir' servico.pk %}">
-        {% csrf_token %}
-        <div class="acoes">
-            <button type="submit" class="btn btn-perigo">Confirmar exclusão</button>
-            <a class="btn btn-sec" href="{% url 'servico' %}">Voltar</a>
-        </div>
-    </form>
-</div>
-</body>
-</html>
+{% block warning %}Serviços que já foram usados em atendimentos não podem ser excluídos.{% endblock %}
+{% block back_url %}{% url 'servico' %}{% endblock %}
+{% block submit_text %}Excluir serviço{% endblock %}

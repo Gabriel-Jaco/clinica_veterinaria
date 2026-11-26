@@ -1,171 +1,59 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizar Produto</title>
+{% block title %}{{ produto.nome }}{% endblock %}
+{% block content_class %}content--narrow{% endblock %}
 
-    <style>
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0fdf4;
-            color: #1f2937;
-            padding: 2rem;
-            margin: 0;
-        }
-
-        .container { max-width: 1000px; margin: auto; }
-
-        .header-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            border-top: 5px solid #0d9488;
-            box-shadow: 0 2px 8px #00000010;
-            margin-bottom: 25px;
-        }
-
-        .info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .info p { margin: 5px 0; }
-
-        .btn {
-            padding: 10px 16px;
-            border-radius: 6px;
-            border: 1px solid #0d9488;
-            color: white;
-            background: #0d9488;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-        }
-
-        .btn:hover { background: #0f766e; }
-
-        .btn-voltar { background: white; color: #0d9488; }
-
-        .btn-voltar:hover { color: white; }
-
-        .table-responsive { overflow-x: auto; }
-
-        table { width: 100%; border-collapse: collapse; white-space: nowrap; }
-
-        th, td {
-            padding: 13px;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        th { background: #f9fafb; text-transform: uppercase; font-size: 12px; }
-
-        tr:hover { background: #f0fdf4; }
-
-        .acoes { display: flex; gap: 12px; }
-
-        .acoes a { color: #0d9488; font-weight: 600; text-decoration: none; }
-
-        .vazio { text-align: center; padding: 20px; color: #6b7280; }
-
-        h1, h2 { margin-top: 0; }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-
-        <div class="header-nav">
-            <h1>Detalhes do Produto</h1>
-            <a href="{% url 'produto' %}" class="btn btn-voltar">Voltar</a>
-        </div>
-
-        <div class="card">
-            <div class="info">
-                <div>
-                    <p><strong>Nome:</strong></p>
-                    <p>{{ produto.nome }}</p>
-                </div>
-
-                <div>
-                    <p><strong>Preço de custo:</strong></p>
-                    <p>R$ {{ produto.preco_custo }}</p>
-                </div>
-
-                <div>
-                    <p><strong>Preço de venda:</strong></p>
-                    <p>R$ {{ produto.preco_venda }}</p>
-                </div>
-
-                <div>
-                    <p><strong>Estoque atual:</strong></p>
-                    <p>{{ produto.estoque }}</p>
-                </div>
-            </div>
-
-            <br>
-
-            <div class="acoes">
-                <a href="{% url 'editar_produto' produto.pk %}" class="btn">Editar produto</a>
-                <a href="{% url 'cadastro_lote' %}?produto={{ produto.pk }}" class="btn">Adicionar lote</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Lotes deste produto</h2>
-
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Número</th>
-                            <th>Fornecedor</th>
-                            <th>Validade</th>
-                            <th>Quantidade</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for lote in lotes %}
-                            <tr>
-                                <td>{{ lote.numero }}</td>
-                                <td>{{ lote.fornecedor.nome }}</td>
-                                <td>{{ lote.data_validade|date:"d/m/Y" }}</td>
-                                <td>{{ lote.quantidade }}</td>
-                                <td>
-                                    <div class="acoes">
-                                        <a href="{% url 'visualizar_lote' lote.pk %}">Visualizar</a>
-                                        <a href="{% url 'editar_lote' lote.pk %}">Editar</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="5" class="vazio">
-                                    Nenhum lote cadastrado para este produto.
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+{% block content %}
+<header class="page-head">
+    <div class="page-head__text">
+        <a class="back" href="{% url 'produto' %}">{% include "partials/icon.html" with n="arrow-left" %}Produtos</a>
+        <h1>{{ produto.nome }}</h1>
     </div>
-</body>
-</html>
+    <div class="page-actions">
+        {% if perms.app.delete_produto %}<a class="btn btn--danger-outline" href="{% url 'excluir_produto' produto.pk %}">{% include "partials/icon.html" with n="trash-2" %}Excluir</a>{% endif %}
+        {% if perms.app.change_produto %}<a class="btn btn--secondary" href="{% url 'editar_produto' produto.pk %}">{% include "partials/icon.html" with n="pencil" %}Editar produto</a>{% endif %}
+        {% if perms.app.add_lote %}<a class="btn btn--primary" href="{% url 'cadastro_lote' %}?produto={{ produto.pk }}">{% include "partials/icon.html" with n="package-plus" %}Adicionar lote</a>{% endif %}
+    </div>
+</header>
+
+<section class="panel">
+    <dl class="facts">
+        <div><dt>Estoque atual</dt><dd>{{ produto.estoque|floatformat:"-2g" }} {{ produto.unidade }}</dd></div>
+        <div><dt>Unidade de venda</dt><dd>{{ produto.get_unidade_display }}</dd></div>
+        <div><dt>Preço de custo</dt><dd>R$&nbsp;{{ produto.preco_custo|floatformat:"2g" }}</dd></div>
+        <div><dt>Preço de venda</dt><dd>R$&nbsp;{{ produto.preco_venda|floatformat:"2g" }}</dd></div>
+    </dl>
+</section>
+
+<section class="panel">
+    <div class="panel__head"><h2>Lotes deste produto</h2></div>
+    {% if lotes %}
+    {% now "Y-m-d" as hoje %}
+    <div class="table-wrap">
+        <table class="table table--stack">
+            <thead>
+                <tr><th>Lote</th><th>Fornecedor</th><th>Validade</th><th class="num">Quantidade</th><th class="col-actions">Ações</th></tr>
+            </thead>
+            <tbody>
+                {% for lote in lotes %}
+                <tr>
+                    <td class="cell-main"><strong>{{ lote.numero }}</strong></td>
+                    <td data-label="Fornecedor">{{ lote.fornecedor.nome }}</td>
+                    <td data-label="Validade" class="nowrap"><span>{{ lote.data_validade|date:"d/m/Y" }} {% with validade=lote.data_validade|date:"Y-m-d" %}{% if validade < hoje %}{% include "partials/badge.html" with code="vencido" text="Vencido" %}{% endif %}{% endwith %}</span></td>
+                    <td data-label="Quantidade" class="num">{{ lote.quantidade|floatformat:"-2g" }} {{ produto.unidade }}</td>
+                    <td class="col-actions">
+                        <div class="row-actions">
+                            {% if perms.app.view_lote %}<a class="icon-btn" href="{% url 'visualizar_lote' lote.pk %}" aria-label="Ver lote {{ lote.numero }}" data-tip="Ver">{% include "partials/icon.html" with n="eye" %}<span class="icon-btn__text">Ver</span></a>{% endif %}
+                            {% if perms.app.change_lote %}<a class="icon-btn" href="{% url 'editar_lote' lote.pk %}" aria-label="Editar lote {{ lote.numero }}" data-tip="Editar">{% include "partials/icon.html" with n="pencil" %}<span class="icon-btn__text">Editar</span></a>{% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        {% include "partials/empty.html" with icon="boxes" title="Nenhum lote cadastrado" text="Adicione um lote para dar entrada no estoque deste produto." %}
+    {% endif %}
+</section>
+{% endblock %}

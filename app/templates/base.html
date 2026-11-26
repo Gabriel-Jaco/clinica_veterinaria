@@ -1,0 +1,39 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0d3b39">
+    <title>{% block title %}Painel{% endblock %} - VetSystem</title>
+    <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <script>document.documentElement.classList.add("js");</script>
+    <script src="{% static 'js/app.js' %}" defer></script>
+</head>
+<body>
+{% block body %}
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+<div class="app">
+    {% include "partials/sidebar.html" %}
+    <div class="scrim" data-menu-close></div>
+
+    <div class="app__main">
+        <header class="mobilebar">
+            <button type="button" class="mobilebar__button" data-menu-open aria-controls="menu" aria-expanded="false">{% include "partials/icon.html" with n="menu" %}Menu</button>
+            <a class="brand" href="{% url 'index' %}">
+                <span class="brand__mark">{% include "partials/icon.html" with n="paw-print" %}</span>
+                <span class="brand__name">VetSystem</span>
+            </a>
+            {% if perms.app.add_atendimento %}<a class="btn btn--accent" href="{% url 'atendimento_cadastro' %}">{% include "partials/icon.html" with n="plus" %}<span class="sr-only">Novo </span>Atendimento</a>{% endif %}
+        </header>
+
+        <main id="conteudo" class="content {% block content_class %}{% endblock %}">
+            {% include "partials/messages.html" %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

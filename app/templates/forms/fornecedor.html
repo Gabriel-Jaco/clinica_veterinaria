@@ -1,0 +1,24 @@
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Dados do fornecedor</h2>
+            <p>Empresa que entrega os produtos.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.nome %}
+            {% include "partials/field.html" with field=form.cnpj cls="field--half" icon="id-card" hint="Formato: 00.000.000/0000-00" %}
+            {% include "partials/field.html" with field=form.contato cls="field--half" icon="phone" %}
+            {% include "partials/field.html" with field=form.email icon="mail" %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Endereço</h2>
+            <p>Rua, número, bairro e cidade.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.rua cls="field--two-thirds" icon="map-pin" %}
+            {% include "partials/field.html" with field=form.numero cls="field--third" %}
+            {% include "partials/field.html" with field=form.bairro cls="field--half" %}
+            {% include "partials/field.html" with field=form.cidade cls="field--half" %}
+        </div>
+    </div>

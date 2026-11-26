@@ -1,0 +1,10 @@
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Serviço</h2>
+            <p>Aparece na lista ao registrar um atendimento.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.nome cls="field--two-thirds" %}
+            {% include "partials/field.html" with field=form.valor cls="field--third" icon="circle-dollar-sign" %}
+        </div>
+    </div>

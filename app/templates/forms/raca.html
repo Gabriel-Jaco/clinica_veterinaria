@@ -1,0 +1,10 @@
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Raça</h2>
+            <p>A raça fica disponível no cadastro de animais.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.nome cls="field--half" %}
+            {% include "partials/field.html" with field=form.especie cls="field--half" icon="paw-print" %}
+        </div>
+    </div>

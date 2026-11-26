@@ -1,112 +1,26 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Lote</title>
+{% block title %}Editar lote{% endblock %}
+{% block content_class %}content--narrow{% endblock %}
 
-    <style>
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0fdf4;
-            color: #1f2937;
-            padding: 2rem;
-            margin: 0;
-        }
-
-        .container { max-width: 700px; margin: auto; }
-
-        .header-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            gap: 1rem;
-        }
-
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            border-top: 5px solid #0d9488;
-            box-shadow: 0 2px 8px #00000010;
-        }
-
-        .campo { margin-bottom: 1.2rem; }
-
-        label { display: block; margin-bottom: 7px; font-weight: 600; }
-
-        input, select {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            font-size: 15px;
-        }
-
-        .erro { color: #dc2626; font-size: 13px; margin-top: 5px; }
-
-        .botoes { display: flex; gap: 10px; margin-top: 20px; }
-
-        .btn {
-            padding: 11px 18px;
-            border: 1px solid #0d9488;
-            border-radius: 6px;
-            background: #0d9488;
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn:hover { background: #0f766e; }
-
-        .btn-voltar { background: white; color: #0d9488; }
-
-        .btn-voltar:hover { color: white; }
-
-        h1 { margin: 0; font-size: 25px; }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-
-        <div class="header-nav">
-            <h1>Editar Lote</h1>
-            <a href="{% url 'lote' %}" class="btn btn-voltar">Voltar</a>
-        </div>
-
-        <div class="card">
-
-            <form method="POST">
-                {% csrf_token %}
-
-                {% if form.non_field_errors %}
-                    <div class="erro">{{ form.non_field_errors }}</div>
-                {% endif %}
-
-                {% for field in form %}
-                    <div class="campo">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {{ field }}
-
-                        {% if field.errors %}
-                            <div class="erro">{{ field.errors }}</div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                <div class="botoes">
-                    <button type="submit" class="btn">Salvar alterações</button>
-                    <a href="{% url 'lote' %}" class="btn btn-voltar">Cancelar</a>
-                </div>
-            </form>
-
-        </div>
+{% block content %}
+<header class="page-head">
+    <div class="page-head__text">
+        <a class="back" href="{% url 'lote' %}">{% include "partials/icon.html" with n="arrow-left" %}Lotes</a>
+        <h1>Editar lote</h1>
+        <p>Lote {{ lote.numero }}</p>
     </div>
-</body>
-</html>
+</header>
+
+<form method="post" class="panel">
+    {% csrf_token %}
+    {% include "partials/form_errors.html" %}
+
+    {% include "forms/lote.html" %}
+
+    <div class="form-actions">
+        <a class="btn btn--secondary" href="{% url 'lote' %}">Cancelar</a>
+        <button type="submit" class="btn btn--primary">{% include "partials/icon.html" with n="save" %}Salvar alterações</button>
+    </div>
+</form>
+{% endblock %}

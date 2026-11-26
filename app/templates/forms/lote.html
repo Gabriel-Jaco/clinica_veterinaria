@@ -1,0 +1,21 @@
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Origem</h2>
+            <p>Produto recebido e quem entregou.{% if perms.app.add_produto %} <a href="{% url 'cadastro_produto' %}">Cadastrar produto</a>.{% endif %}{% if perms.app.add_fornecedor %} <a href="{% url 'cadastro_fornecedor' %}">Cadastrar fornecedor</a>.{% endif %}</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.produto cls="field--half" icon="package" %}
+            {% include "partials/field.html" with field=form.fornecedor cls="field--half" icon="truck" %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Lote</h2>
+            <p>Número impresso na embalagem, quantidade e validade.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.numero cls="field--third" %}
+            {% include "partials/field.html" with field=form.quantidade cls="field--third" %}
+            {% include "partials/field.html" with field=form.data_validade cls="field--third" %}
+        </div>
+    </div>

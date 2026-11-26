@@ -1,367 +1,76 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotes - Clínica Veterinária</title>
+{% block title %}Lotes{% endblock %}
 
-    <style>
-        :root {
-            --primary: #0d9488;
-            --primary-hover: #0f766e;
-            --background: #f0fdf4;
-            --white: #ffffff;
-            --text: #1f2937;
-            --muted: #64748b;
-            --border: #e2e8f0;
-            --danger: #e11d48;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background: var(--background); color: var(--text); }
-
-        header {
-            background: white;
-            border-bottom: 1px solid var(--border);
-            padding: 18px 5%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .logo { color: var(--primary); font-size: 21px; font-weight: bold; }
-        nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
-        nav a, .menu-label {
-            text-decoration: none;
-            color: var(--muted);
-            padding: 10px 13px;
-            border-radius: 8px;
-            font-size: 14px;
-            display: inline-block;
-        }
-
-        nav a:hover, nav a.active { background: #ccfbf1; color: var(--primary-hover); }
-        .dropdown { position: relative; }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            min-width: 160px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 6px;
-            z-index: 10;
-            box-shadow: 0 5px 15px #00000012;
-        }
-
-        .dropdown:hover .dropdown-content { display: block; }
-        .dropdown-content a { display: block; }
-
-        .logout {
-            color: var(--danger);
-            background: none;
-            border: none;
-            padding: 10px 13px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        main { max-width: 1400px; margin: 35px auto; padding: 0 5%; }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .page-header h1 { font-size: 27px; margin-bottom: 7px; }
-        .page-header p { color: var(--muted); font-size: 14px; }
-
-        .btn {
-            display: inline-block;
-            border: none;
-            border-radius: 8px;
-            padding: 11px 17px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); }
-        .btn-edit { background: #e0f2fe; color: #0369a1; }
-        .btn-delete { background: #ffe4e6; color: var(--danger); }
-        .btn-view { background: #ccfbf1; color: #0f766e; }
-
-        .search-card, .table-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 22px;
-            margin-bottom: 22px;
-        }
-
-        .search-form { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        .search-form input, .search-form select {
-            flex: 1;
-            min-width: 180px;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            background: white;
-        }
-
-        .search-form input:focus, .search-form select:focus { border-color: var(--primary); }
-
-        .search-form button {
-            border: none;
-            border-radius: 8px;
-            background: var(--primary);
-            color: white;
-            padding: 0 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .search-form button:hover { background: var(--primary-hover); }
-
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            gap: 10px;
-        }
-
-        .table-header h2 { font-size: 18px; }
-        .count { color: var(--muted); font-size: 13px; }
-        .table-wrapper { overflow-x: auto; }
-
-        table { width: 100%; border-collapse: collapse; min-width: 950px; }
-
-        th, td {
-            text-align: left;
-            padding: 15px 12px;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
-
-        th { color: var(--muted); font-size: 12px; text-transform: uppercase; background: #f8fafc; }
-        tbody tr:hover { background: #f8fafc; }
-
-        .quantidade { font-weight: bold; color: var(--primary-hover); }
-        .actions { display: flex; gap: 7px; }
-        .actions .btn { padding: 8px 11px; font-size: 12px; }
-
-        .messages { margin-bottom: 20px; }
-
-        .message {
-            padding: 13px 16px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 14px;
-            background: #ccfbf1;
-            color: #115e59;
-        }
-
-        .message.error { background: #ffe4e6; color: #9f1239; }
-
-        .empty { text-align: center; padding: 45px 15px; color: var(--muted); }
-        .empty h3 { color: var(--text); margin-bottom: 8px; }
-
-        @media (max-width: 850px) {
-            header { align-items: flex-start; flex-direction: column; }
-            nav { width: 100%; }
-        }
-
-        @media (max-width: 550px) {
-            .search-form { flex-direction: column; }
-            .search-form button { padding: 12px; }
-            .page-header { align-items: flex-start; flex-direction: column; }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-    <div class="logo">Clínica Veterinária</div>
-
-    <nav>
-        <a href="{% url 'index' %}">Início</a>
-        <a href="{% url 'cliente' %}">Clientes</a>
-
-        {% if perms.app.view_animal %}
-            <a href="{% url 'animal' %}">Animais</a>
-        {% endif %}
-
-        {% if perms.app.view_atendimento %}
-            <a href="{% url 'atendimento' %}">Atendimentos</a>
-        {% endif %}
-
-        {% if perms.app.view_fatura %}
-            <a href="{% url 'fatura' %}">Faturas</a>
-        {% endif %}
-
-        {% if perms.app.view_produto %}
-            <a href="{% url 'produto' %}">Estoque</a>
-        {% endif %}
-
-        {% if perms.app.view_funcionario %}
-            <a href="{% url 'funcionario' %}">Funcionários</a>
-        {% endif %}
-
-        <form action="{% url 'logout' %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="logout">Sair</button>
-        </form>
-    </nav>
+{% block content %}
+<header class="page-head">
+    <div class="page-head__text">
+        <div class="page-head__title">
+            <h1>Lotes</h1>
+            <span class="count">{{ lotes|length }} registro{{ lotes|length|pluralize }}</span>
+        </div>
+        <p>Quantidade disponível e validade de cada lote, do vencimento mais próximo ao mais distante.</p>
+    </div>
+    <div class="page-actions">
+        {% if perms.app.view_produto %}<a class="btn btn--secondary" href="{% url 'produto' %}">{% include "partials/icon.html" with n="package" %}Ver produtos</a>{% endif %}
+        {% if perms.app.add_lote %}<a class="btn btn--primary" href="{% url 'cadastro_lote' %}">{% include "partials/icon.html" with n="package-plus" %}Cadastrar lote</a>{% endif %}
+    </div>
 </header>
 
-<main>
+<section class="panel">
+    <form method="get" class="toolbar" role="search">
+        {% include "partials/search.html" with placeholder="Buscar por número, produto ou fornecedor" %}
+        <label class="sr-only" for="filtro-produto">Produto</label>
+        <select name="produto" id="filtro-produto">
+            <option value="">Todos os produtos</option>
+            {% for produto in produtos %}<option value="{{ produto.pk }}" {% if produto_id == produto.pk|stringformat:"s" %}selected{% endif %}>{{ produto.nome }}</option>{% endfor %}
+        </select>
+        <button type="submit" class="btn btn--primary">Buscar</button>
+        {% if pesquisa or produto_id %}<a class="btn btn--quiet" href="{% url 'lote' %}">{% include "partials/icon.html" with n="filter-x" %}Limpar</a>{% endif %}
+    </form>
 
-    <div class="page-header">
-        <div>
-            <h1>Lotes</h1>
-            <p>Consulte os lotes cadastrados, suas quantidades e datas de validade.</p>
-        </div>
-
-        {% if perms.app.add_lote %}
-            <a href="{% url 'cadastro_lote' %}" class="btn btn-primary">
-                + Cadastrar lote
-            </a>
-        {% endif %}
-    </div>
-
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="message {% if message.tags == 'error' %}error{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    <section class="search-card">
-        <form method="GET" class="search-form">
-
-            <input
-                type="text"
-                name="q"
-                value="{{ pesquisa }}"
-                placeholder="Buscar por número, produto ou fornecedor..."
-            >
-
-            <select name="produto">
-                <option value="">Todos os produtos</option>
-
-                {% for produto in produtos %}
-                    <option
-                        value="{{ produto.pk }}"
-                        {% if produto_id == produto.pk|stringformat:"s" %}selected{% endif %}
-                    >
-                        {{ produto.nome }}
-                    </option>
+    {% if lotes %}
+    <div class="table-wrap">
+        <table class="table table--stack table--wide">
+            <thead>
+                <tr><th>Lote</th><th>Produto</th><th>Fornecedor</th><th>Validade</th><th class="num">Disponível</th><th class="col-actions">Ações</th></tr>
+            </thead>
+            <tbody>
+                {% for lote in lotes %}
+                {% now "Y-m-d" as hoje %}
+                <tr>
+                    <td class="cell-main"><a class="identity__name" href="{% url 'visualizar_lote' lote.pk %}">{{ lote.numero }}</a></td>
+                    <td data-label="Produto">{{ lote.produto.nome }}</td>
+                    <td data-label="Fornecedor">{{ lote.fornecedor.nome }}</td>
+                    <td data-label="Validade" class="nowrap">
+                        <span>{{ lote.data_validade|date:"d/m/Y" }}
+                        {% with validade=lote.data_validade|date:"Y-m-d" %}{% if validade < hoje %}{% include "partials/badge.html" with code="vencido" text="Vencido" %}{% endif %}{% endwith %}</span>
+                    </td>
+                    <td data-label="Disponível" class="num">
+                        {% if lote.quantidade <= 0 %}<span class="badge badge--pendente">{% include "partials/icon.html" with n="circle-dashed" %}Esgotado</span>{% else %}<strong>{{ lote.quantidade|floatformat:"-2g" }} {{ lote.produto.unidade }}</strong>{% endif %}
+                    </td>
+                    <td class="col-actions">
+                        <div class="row-actions">
+                            {% if perms.app.view_lote %}<a class="icon-btn" href="{% url 'visualizar_lote' lote.pk %}" aria-label="Ver lote {{ lote.numero }}" data-tip="Ver">{% include "partials/icon.html" with n="eye" %}<span class="icon-btn__text">Ver</span></a>{% endif %}
+                            {% if perms.app.change_lote %}<a class="icon-btn" href="{% url 'editar_lote' lote.pk %}" aria-label="Editar lote {{ lote.numero }}" data-tip="Editar">{% include "partials/icon.html" with n="pencil" %}<span class="icon-btn__text">Editar</span></a>{% endif %}
+                            {% if perms.app.delete_lote %}<a class="icon-btn icon-btn--danger" href="{% url 'excluir_lote' lote.pk %}" aria-label="Excluir lote {{ lote.numero }}" data-tip="Excluir">{% include "partials/icon.html" with n="trash-2" %}<span class="icon-btn__text">Excluir</span></a>{% endif %}
+                        </div>
+                    </td>
+                </tr>
                 {% endfor %}
-            </select>
-
-            <button type="submit">Pesquisar</button>
-
-            {% if pesquisa or produto_id %}
-                <a href="{% url 'lote' %}" class="btn btn-edit">Limpar</a>
-            {% endif %}
-
-        </form>
-    </section>
-
-    <section class="table-card">
-
-        <div class="table-header">
-            <h2>Lotes cadastrados</h2>
-            <span class="count">{{ lotes|length }} registro(s)</span>
-        </div>
-
-        {% if lotes %}
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Número do lote</th>
-                            <th>Produto</th>
-                            <th>Fornecedor</th>
-                            <th>Data de validade</th>
-                            <th>Quantidade disponível</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for lote in lotes %}
-                            <tr>
-                                <td><strong>{{ lote.numero }}</strong></td>
-                                <td>{{ lote.produto.nome }}</td>
-                                <td>{{ lote.fornecedor.nome }}</td>
-                                <td>{{ lote.data_validade|date:"d/m/Y" }}</td>
-
-                                <td class="quantidade">
-                                    {{ lote.quantidade|floatformat:-2 }} {{ lote.produto.unidade }}
-                                </td>
-
-                                <td>
-                                    <div class="actions">
-                                        {% if perms.app.view_lote %}
-                                            <a href="{% url 'visualizar_lote' lote.pk %}" class="btn btn-view">
-                                                Visualizar
-                                            </a>
-                                        {% endif %}
-
-                                        {% if perms.app.change_lote %}
-                                            <a href="{% url 'editar_lote' lote.pk %}" class="btn btn-edit">
-                                                Editar
-                                            </a>
-                                        {% endif %}
-
-                                        {% if perms.app.delete_lote %}
-                                            <a href="{% url 'excluir_lote' lote.pk %}" class="btn btn-delete">
-                                                Excluir
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            </tbody>
+        </table>
+    </div>
+    {% elif pesquisa or produto_id %}
+        {% url 'lote' as limpar_url %}
+        {% include "partials/empty.html" with icon="search" title="Nada encontrado" text="Tente outro termo ou limpe os filtros." action_url=limpar_url action_icon="filter-x" action_text="Limpar busca" action_style="btn--secondary" %}
+    {% else %}
+        {% if perms.app.add_lote %}
+            {% url 'cadastro_lote' as novo_url %}
+            {% include "partials/empty.html" with icon="boxes" title="Nenhum lote cadastrado" text="Registre um lote para dar entrada no estoque." action_url=novo_url action_icon="package-plus" action_text="Cadastrar lote" %}
         {% else %}
-            <div class="empty">
-                <h3>Nenhum lote encontrado</h3>
-                {% if pesquisa or produto_id %}
-                    <p>Não encontramos lotes com os filtros informados.</p>
-                {% else %}
-                    <p>Ainda não existem lotes cadastrados.</p>
-                {% endif %}
-            </div>
+            {% include "partials/empty.html" with icon="boxes" title="Nenhum lote cadastrado" text="Registre um lote para dar entrada no estoque." %}
         {% endif %}
-
-    </section>
-
-</main>
-
-</body>
-</html>
+    {% endif %}
+</section>
+{% endblock %}

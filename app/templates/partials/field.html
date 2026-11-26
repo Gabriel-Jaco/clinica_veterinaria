@@ -1,0 +1,6 @@
+<div class="field {{ cls }}{% if field.errors %} field--invalid{% endif %}">
+    <label for="{{ field.id_for_label }}">{{ label|default:field.label }}{% if not field.field.required %}<span class="optional">(opcional)</span>{% endif %}</label>
+    {% if icon %}<div class="control control--icon">{% include "partials/icon.html" with n=icon %}{{ field }}</div>{% else %}{{ field }}{% endif %}
+    {% if hint %}<p class="hint">{{ hint }}</p>{% endif %}
+    {% for error in field.errors %}<p class="error">{% include "partials/icon.html" with n="circle-alert" %}<span>{{ error }}</span></p>{% endfor %}
+</div>

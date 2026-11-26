@@ -1,123 +1,85 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Atendimento #{{ atendimento.pk }}</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
-        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-        h1 { margin: 0; font-size: 22px; }
-        h2 { font-size: 17px; margin: 28px 0 8px; }
-        .topo { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
-        .btn-sec { background: #6b7280; }
-        .btn-perigo { background: #dc2626; }
-        .messages { list-style: none; padding: 0; margin: 0 0 16px; }
-        .messages li { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; background: #e0f2fe; }
-        .messages .success { background: #dcfce7; }
-        .messages .error { background: #fee2e2; }
-        .info { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 24px; }
-        .info div span { display: block; font-size: 12px; color: #6b7280; text-transform: uppercase; }
-        .info div strong { font-size: 15px; }
-        .observacao { margin-top: 16px; background: #f9fafb; border-radius: 6px; padding: 10px 14px; font-size: 14px; }
-        .tabela-scroll { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; }
-        th { background: #f9fafb; }
-        td.valor, th.valor { text-align: right; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background: #e5e7eb; }
-        .badge-aberto, .badge-parcial { background: #fef3c7; }
-        .badge-concluido, .badge-pago { background: #dcfce7; }
-        .badge-cancelado { background: #fee2e2; }
-        .totais { margin-top: 16px; margin-left: auto; width: 100%; max-width: 320px; font-size: 14px; }
-        .totais div { display: flex; justify-content: space-between; padding: 4px 0; }
-        .totais .total { border-top: 2px solid #222; margin-top: 4px; padding-top: 8px; font-size: 16px; font-weight: bold; }
-        .vazio { text-align: center; color: #6b7280; padding: 16px; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="topo">
-        <h1>Atendimento #{{ atendimento.pk }}</h1>
-        <div>
-            <a class="btn btn-sec" href="{% url 'atendimento' %}">Voltar</a>
-            {% if pode_alterar %}
-            <a class="btn" href="{% url 'atendimento_editar' atendimento.pk %}">Editar</a>
-            <a class="btn btn-perigo" href="{% url 'atendimento_cancelar' atendimento.pk %}">Cancelar</a>
-            {% endif %}
+{% extends "base.html" %}
+
+{% block title %}Atendimento #{{ atendimento.pk }}{% endblock %}
+{% block content_class %}content--narrow{% endblock %}
+
+{% block content %}
+<header class="page-head">
+    <div class="page-head__text">
+        <a class="back" href="{% url 'atendimento' %}">{% include "partials/icon.html" with n="arrow-left" %}Atendimentos</a>
+        <div class="page-head__title">
+            <h1>Atendimento #{{ atendimento.pk }}</h1>
+            {% include "partials/badge.html" with code=atendimento.status text=atendimento.get_status_display %}
+        </div>
+    </div>
+    <div class="page-actions">
+        {% if pode_alterar and perms.app.change_atendimento %}
+        <a class="btn btn--danger-outline" href="{% url 'atendimento_cancelar' atendimento.pk %}">{% include "partials/icon.html" with n="ban" %}Cancelar atendimento</a>
+        <a class="btn btn--primary" href="{% url 'atendimento_editar' atendimento.pk %}">{% include "partials/icon.html" with n="pencil" %}Editar</a>
+        {% endif %}
+        {% if atendimento.fatura_id and perms.app.view_fatura %}
+        <a class="btn btn--primary" href="{% url 'fatura_detalhe' atendimento.fatura_id %}">{% include "partials/icon.html" with n="receipt-text" %}Abrir fatura #{{ atendimento.fatura_id }}</a>
+        {% elif atendimento.status == "concluido" and not atendimento.fatura_id and perms.app.add_fatura %}
+        <a class="btn btn--accent" href="{% url 'fatura_cadastro' %}?cliente={{ atendimento.animal.tutor.pk }}">{% include "partials/icon.html" with n="file-plus-2" %}Emitir fatura</a>
+        {% endif %}
+    </div>
+</header>
+
+<section class="panel">
+    <div class="patient">
+        {% include "partials/species.html" with especie=atendimento.animal.raca.especie.nome cls="species--large" %}
+        <div class="patient__text">
+            <p class="patient__name">{{ atendimento.animal.nome }} {{ atendimento.animal.sobrenome|default:"" }}</p>
+            <p class="muted">{{ atendimento.animal.raca.especie.nome }}, {{ atendimento.animal.raca.nome }}. Peso: {{ atendimento.animal.peso|floatformat:"-3" }} kg</p>
         </div>
     </div>
 
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    <div class="info">
-        <div><span>Data</span><strong>{{ atendimento.data|date:"d/m/Y" }}</strong></div>
-        <div><span>Status</span><strong><span class="badge badge-{{ atendimento.status }}" style="display:inline-block;text-transform:none">{{ atendimento.get_status_display }}</span></strong></div>
-        <div><span>Animal</span><strong>{{ atendimento.animal.nome }}</strong></div>
-        <div><span>Tutor</span><strong>{{ atendimento.animal.tutor.nome }} {{ atendimento.animal.tutor.sobrenome }}</strong></div>
-        <div><span>Serviço</span><strong>{{ atendimento.servico.nome }}</strong></div>
-        <div><span>Funcionário</span><strong>{{ atendimento.funcionario.nome }} {{ atendimento.funcionario.sobrenome }}</strong></div>
-        <div>
-            <span>Fatura</span>
-            <strong>{% if atendimento.fatura_id %}#{{ atendimento.fatura_id }}{% else %}Não faturado{% endif %}</strong>
-        </div>
-        <div>
-            <span>Pagamento</span>
-            <strong>
-                {% if atendimento.status == "cancelado" %}
-                    —
-                {% else %}
-                    <span class="badge badge-{{ atendimento.status_pagamento.value }}" style="display:inline-block;text-transform:none">{{ atendimento.status_pagamento.label }}</span>
-                {% endif %}
-            </strong>
-        </div>
-    </div>
+    <dl class="facts">
+        <div><dt>Tutor</dt><dd>{{ atendimento.animal.tutor.nome }} {{ atendimento.animal.tutor.sobrenome }}</dd></div>
+        <div><dt>Contato do tutor</dt><dd>{{ atendimento.animal.tutor.contato }}</dd></div>
+        <div><dt>Data</dt><dd>{{ atendimento.data|date:"d/m/Y" }}</dd></div>
+        <div><dt>Serviço</dt><dd>{{ atendimento.servico.nome }}</dd></div>
+        <div><dt>Funcionário</dt><dd>{{ atendimento.funcionario.nome }} {{ atendimento.funcionario.sobrenome }}</dd></div>
+        <div><dt>Fatura</dt><dd>{% if atendimento.fatura_id %}#{{ atendimento.fatura_id }}{% else %}Não faturado{% endif %}</dd></div>
+        <div><dt>Pagamento</dt><dd>
+            {% if atendimento.status == "cancelado" %}Não se aplica{% else %}{% with pagamento=atendimento.status_pagamento %}{% include "partials/badge.html" with code=pagamento.value text=pagamento.label %}{% endwith %}{% endif %}
+        </dd></div>
+    </dl>
 
     {% if atendimento.observacao %}
-    <div class="observacao"><strong>Observações:</strong> {{ atendimento.observacao|linebreaksbr }}</div>
+    <div class="observation">
+        <h3>Observações</h3>
+        <p>{{ atendimento.observacao|linebreaksbr }}</p>
+    </div>
     {% endif %}
+</section>
 
-    <h2>Materiais utilizados</h2>
-    <div class="tabela-scroll">
-        <table>
+<section class="panel">
+    <div class="panel__head"><h2>Materiais e valores</h2></div>
+    <div class="table-wrap">
+        <table class="table table--stack">
             <thead>
-                <tr>
-                    <th>Produto</th>
-                    <th>Lote</th>
-                    <th class="valor">Quantidade</th>
-                    <th class="valor">Preço unit.</th>
-                    <th class="valor">Subtotal</th>
-                </tr>
+                <tr><th>Produto</th><th>Lote</th><th class="num">Quantidade</th><th class="num">Preço unitário</th><th class="num">Subtotal</th></tr>
             </thead>
             <tbody>
                 {% for item in itens %}
                 <tr>
-                    <td>{{ item.produto.nome }}</td>
-                    <td>{{ item.lote.numero }}</td>
-                    <td class="valor">{{ item.quantidade|floatformat:"-2" }}</td>
-                    <td class="valor">R$ {{ item.preco_venda|floatformat:2 }}</td>
-                    <td class="valor">R$ {{ item.subtotal|floatformat:2 }}</td>
+                    <td class="cell-main"><strong>{{ item.produto.nome }}</strong></td>
+                    <td data-label="Lote">{{ item.lote.numero }}</td>
+                    <td data-label="Quantidade" class="num">{{ item.quantidade|floatformat:"-2g" }} {{ item.produto.unidade }}</td>
+                    <td data-label="Preço unitário" class="num">R$&nbsp;{{ item.preco_venda|floatformat:"2g" }}</td>
+                    <td data-label="Subtotal" class="num">R$&nbsp;{{ item.subtotal|floatformat:"2g" }}</td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="5" class="vazio">Nenhum material registrado.</td></tr>
+                <tr><td colspan="5" class="cell-main muted">Nenhum material registrado.</td></tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr><td colspan="4" class="num">Serviço</td><td class="num">R$&nbsp;{{ atendimento.valor_servico|floatformat:"2g" }}</td></tr>
+                <tr><td colspan="4" class="num">Materiais</td><td class="num">R$&nbsp;{{ atendimento.valor_materiais|floatformat:"2g" }}</td></tr>
+                <tr><td colspan="4" class="num">Total</td><td class="num">R$&nbsp;{{ atendimento.valor_total|floatformat:"2g" }}</td></tr>
+            </tfoot>
         </table>
     </div>
-
-    <div class="totais">
-        <div><span>Serviço</span><span>R$ {{ atendimento.valor_servico|floatformat:2 }}</span></div>
-        <div><span>Materiais</span><span>R$ {{ atendimento.valor_materiais|floatformat:2 }}</span></div>
-        <div class="total"><span>Total</span><span>R$ {{ atendimento.valor_total|floatformat:2 }}</span></div>
-    </div>
-</div>
-</body>
-</html>
+</section>
+{% endblock %}

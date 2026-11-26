@@ -1,142 +1,86 @@
-{% load l10n %}<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Emitir fatura</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
-        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-        h1 { margin-top: 0; font-size: 22px; }
-        h2 { font-size: 17px; margin: 28px 0 8px; }
-        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
-        .btn-sec { background: #6b7280; }
-        .acoes { margin-top: 24px; display: flex; gap: 8px; }
-        .messages { list-style: none; padding: 0; margin: 0 0 16px; }
-        .messages li { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; background: #e0f2fe; }
-        .messages .success { background: #dcfce7; }
-        .messages .error { background: #fee2e2; }
-        .campo { margin-bottom: 14px; }
-        .campo label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
-        .campo select { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; font-family: inherit; }
-        .tabela-scroll { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; }
-        th { background: #f9fafb; }
-        td.valor, th.valor { text-align: right; }
-        .col-chk { width: 40px; text-align: center; }
-        .total-box { margin-top: 16px; text-align: right; font-size: 16px; font-weight: bold; }
-        .aviso { background: #fef3c7; border-radius: 6px; padding: 10px 14px; font-size: 14px; }
-        .dica { font-size: 13px; color: #6b7280; margin: 0 0 8px; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1>Emitir fatura</h1>
+{% extends "base.html" %}
+{% load l10n %}
 
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+{% block title %}Emitir fatura{% endblock %}
+{% block content_class %}content--narrow{% endblock %}
 
-    <h2>1. Cliente</h2>
-    <p class="dica">Aparecem só clientes com atendimentos concluídos que ainda não estão em nenhuma fatura.</p>
-
-    {% if clientes %}
-    <form method="get" action="{% url 'fatura_cadastro' %}">
-        <div class="campo">
-            <label for="cliente">Cliente</label>
-            <select name="cliente" id="cliente" onchange="this.form.submit()">
-                <option value="">- Selecione um cliente -</option>
-                {% for c in clientes %}
-                <option value="{{ c.pk|unlocalize }}" {% if cliente and cliente.pk == c.pk %}selected{% endif %}>{{ c.nome }} {{ c.sobrenome }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </form>
-    {% else %}
-    <div class="aviso">
-        Nenhum cliente com atendimentos para faturar. Para um atendimento aparecer aqui, o status dele precisa ser
-        <strong>Concluído</strong> e ele não pode já estar em uma fatura.
+{% block content %}
+<header class="page-head">
+    <div class="page-head__text">
+        <a class="back" href="{% url 'fatura' %}">{% include "partials/icon.html" with n="arrow-left" %}Faturas</a>
+        <h1>Emitir fatura</h1>
+        <p>Escolha o cliente e depois os atendimentos que serão cobrados.</p>
     </div>
-    {% endif %}
+</header>
 
-    {% if cliente %}
-    <h2>2. Atendimentos de {{ cliente.nome }} {{ cliente.sobrenome }}</h2>
+<section class="panel">
+    <div class="panel__head"><div><h2>1. Cliente</h2><p>Aparecem só clientes com atendimentos concluídos e ainda sem fatura.</p></div></div>
+    <div class="panel__body">
+        {% if clientes %}
+        <form method="get" action="{% url 'fatura_cadastro' %}" class="step">
+            <div class="field">
+                <label for="cliente">Cliente</label>
+                <div class="control control--icon">
+                    {% include "partials/icon.html" with n="user" %}
+                    <select name="cliente" id="cliente" data-autosubmit required>
+                        <option value="">Selecione um cliente</option>
+                        {% for c in clientes %}<option value="{{ c.pk|unlocalize }}" {% if cliente and cliente.pk == c.pk %}selected{% endif %}>{{ c.nome }} {{ c.sobrenome }}</option>{% endfor %}
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn--primary step__submit">Ver atendimentos</button>
+        </form>
+        {% else %}
+        <div class="note note--warning">{% include "partials/icon.html" with n="info" %}<p>Nenhum cliente tem atendimentos para faturar. Um atendimento aparece aqui quando está <strong>Concluído</strong> e ainda não faz parte de uma fatura.{% if perms.app.view_atendimento %} <a href="{% url 'atendimento' %}?status=aberto">Ver atendimentos em aberto</a>.{% endif %}</p></div>
+        {% endif %}
+    </div>
+</section>
 
+{% if cliente %}
     {% if atendimentos %}
-    <form method="post" action="{% url 'fatura_cadastro' %}">
+    <form method="post" action="{% url 'fatura_cadastro' %}" class="panel" data-invoice>
         {% csrf_token %}
         <input type="hidden" name="cliente" value="{{ cliente.pk|unlocalize }}">
 
-        <div class="tabela-scroll">
-            <table>
+        <div class="panel__head"><div><h2>2. Atendimentos de {{ cliente.nome }} {{ cliente.sobrenome }}</h2><p>Desmarque o que não deve entrar nesta fatura.</p></div></div>
+
+        <div class="table-wrap">
+            <table class="table table--stack">
                 <thead>
                     <tr>
-                        <th class="col-chk"><input type="checkbox" id="marcar-todos" checked title="Marcar todos"></th>
-                        <th>Data</th>
-                        <th>Animal</th>
-                        <th>Serviço</th>
-                        <th class="valor">Total</th>
+                        <th class="col-check"><input type="checkbox" class="check" data-check-all checked aria-label="Marcar todos"></th>
+                        <th>Animal</th><th>Serviço</th><th>Data</th><th class="num">Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for a in atendimentos %}
                     <tr>
-                        <td class="col-chk">
-                            <input type="checkbox" class="chk-atendimento" name="atendimentos" value="{{ a.pk|unlocalize }}" data-valor="{{ a.valor_total|unlocalize }}" checked>
-                        </td>
-                        <td>{{ a.data|date:"d/m/Y" }}</td>
-                        <td>{{ a.animal.nome }}</td>
-                        <td>{{ a.servico.nome }}</td>
-                        <td class="valor">R$ {{ a.valor_total|floatformat:2 }}</td>
+                        <td class="col-check"><input type="checkbox" class="check" id="atendimento-{{ a.pk|unlocalize }}" name="atendimentos" value="{{ a.pk|unlocalize }}" data-valor="{{ a.valor_total|unlocalize }}" checked></td>
+                        <td data-label="Animal"><label for="atendimento-{{ a.pk|unlocalize }}"><strong>{{ a.animal.nome }}</strong></label></td>
+                        <td data-label="Serviço">{{ a.servico.nome }}</td>
+                        <td data-label="Data" class="nowrap">{{ a.data|date:"d/m/Y" }}</td>
+                        <td data-label="Total" class="num">R$&nbsp;{{ a.valor_total|floatformat:"2g" }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
 
-        <div class="total-box">Total da fatura: R$ <span id="total-selecionado">0,00</span></div>
-
-        <div class="acoes">
-            <button type="submit" class="btn">Emitir fatura</button>
-            <a class="btn btn-sec" href="{% url 'fatura' %}">Voltar</a>
+        <div class="form-actions total-bar">
+            <div>
+                <p class="muted" data-quantity>Total da fatura</p>
+                <p class="total-bar__value" data-total></p>
+            </div>
+            <div class="total-bar__buttons">
+                <a class="btn btn--secondary" href="{% url 'fatura' %}">Cancelar</a>
+                <button type="submit" class="btn btn--primary">{% include "partials/icon.html" with n="file-plus-2" %}Emitir fatura</button>
+            </div>
         </div>
     </form>
-
-    <script>
-        (function () {
-            var checks = document.querySelectorAll(".chk-atendimento");
-            var todos = document.getElementById("marcar-todos");
-            var total = document.getElementById("total-selecionado");
-
-            function atualizar() {
-                var soma = 0;
-                checks.forEach(function (c) {
-                    if (c.checked) { soma += parseFloat(c.dataset.valor); }
-                });
-                total.textContent = soma.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            }
-
-            checks.forEach(function (c) { c.addEventListener("change", atualizar); });
-            todos.addEventListener("change", function () {
-                checks.forEach(function (c) { c.checked = todos.checked; });
-                atualizar();
-            });
-            atualizar();
-        })();
-    </script>
     {% else %}
-    <div class="aviso">Este cliente não tem atendimentos concluídos para faturar.</div>
-    <div class="acoes"><a class="btn btn-sec" href="{% url 'fatura' %}">Voltar</a></div>
+    <section class="panel">
+        {% include "partials/empty.html" with icon="receipt-text" title="Nada para faturar" text="Este cliente não tem atendimentos concluídos sem fatura." %}
+    </section>
     {% endif %}
-    {% else %}
-    <div class="acoes"><a class="btn btn-sec" href="{% url 'fatura' %}">Voltar</a></div>
-    {% endif %}
-</div>
-</body>
-</html>
+{% endif %}
+{% endblock %}

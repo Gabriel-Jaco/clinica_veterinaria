@@ -1,0 +1,20 @@
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Produto</h2>
+            <p>O estoque é calculado a partir dos lotes e não é digitado aqui.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.nome cls="field--two-thirds" label="Nome do produto" %}
+            {% include "partials/field.html" with field=form.unidade cls="field--third" %}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="form-section__head">
+            <h2>Preços</h2>
+            <p>Valores por unidade de venda.</p>
+        </div>
+        <div class="grid">
+            {% include "partials/field.html" with field=form.preco_custo cls="field--half" icon="circle-dollar-sign" label="Preço de custo (R$)" %}
+            {% include "partials/field.html" with field=form.preco_venda cls="field--half" icon="circle-dollar-sign" label="Preço de venda (R$)" %}
+        </div>
+    </div>

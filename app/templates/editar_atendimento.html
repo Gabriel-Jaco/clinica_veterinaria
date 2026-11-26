@@ -1,131 +1,17 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Editar atendimento</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-        h1 { margin-top: 0; font-size: 22px; }
-        h2 { font-size: 17px; margin: 28px 0 8px; }
-        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
-        .btn-sec { background: #6b7280; }
-        .acoes { margin-top: 24px; display: flex; gap: 8px; }
-        .messages { list-style: none; padding: 0; margin: 0 0 16px; }
-        .messages li { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; background: #e0f2fe; }
-        .messages .success { background: #dcfce7; }
-        .messages .error { background: #fee2e2; }
-        .campo { margin-bottom: 14px; }
-        .campo label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
-        .campo input, .campo select, .campo textarea, td input[type="number"], td select { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; font-family: inherit; }
-        .erro, .errorlist { color: #b91c1c; font-size: 13px; list-style: none; padding: 0; margin: 4px 0 0; }
-        .erros-gerais { background: #fee2e2; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; }
-        .erros-gerais .errorlist { margin: 0; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 8px 6px; border-bottom: 1px solid #e5e7eb; text-align: left; vertical-align: top; }
-        th { background: #f9fafb; }
-        .col-qtd { width: 140px; }
-        .col-rem { width: 90px; text-align: center; }
-        .dica { font-size: 13px; color: #6b7280; margin: 0 0 8px; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1>Editar atendimento #{{ atendimento.pk }}</h1>
+{% extends "base.html" %}
 
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+{% block title %}Editar atendimento #{{ atendimento.pk }}{% endblock %}
+{% block content_class %}content--narrow{% endblock %}
 
-    <form method="post" action="{% url 'atendimento_editar' atendimento.pk %}">
-        {% csrf_token %}
+{% block content %}
+{% url 'atendimento_detalhe' atendimento.pk as detalhe_url %}{% with voltar=detalhe_url %}
+<header class="page-head">
+    <div class="page-head__text">
+        <a class="back" href="{{ voltar }}">{% include "partials/icon.html" with n="arrow-left" %}Voltar ao atendimento</a>
+        <h1>Editar atendimento #{{ atendimento.pk }}</h1>
+    </div>
+</header>
 
-        {% if form.non_field_errors %}
-        <div class="erros-gerais">{{ form.non_field_errors }}</div>
-        {% endif %}
-
-        {% for field in form %}
-        <div class="campo">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% for erro in field.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
-        </div>
-        {% endfor %}
-
-        <h2>Materiais utilizados</h2>
-        <p class="dica">Materiais removidos voltam ao estoque do lote. Para cancelar o atendimento inteiro, use a opção Cancelar na lista.</p>
-
-        {{ formset.management_form }}
-
-        {% if formset.non_form_errors %}
-        <div class="erros-gerais">{{ formset.non_form_errors }}</div>
-        {% endif %}
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Lote</th>
-                    <th class="col-qtd">Quantidade</th>
-                    <th class="col-rem">Remover</th>
-                </tr>
-            </thead>
-            <tbody id="itens-body">
-                {% for f in formset %}
-                <tr>
-                    <td>
-                        {% for hidden in f.hidden_fields %}{{ hidden }}{% endfor %}
-                        {{ f.lote }}
-                        {% for erro in f.lote.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
-                    </td>
-                    <td>
-                        {{ f.quantidade }}
-                        {% for erro in f.quantidade.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
-                    </td>
-                    <td class="col-rem">{{ f.DELETE }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <p><button type="button" class="btn btn-sec" id="add-item">+ Adicionar material</button></p>
-
-        <div class="acoes">
-            <button type="submit" class="btn">Salvar alterações</button>
-            <a class="btn btn-sec" href="{% url 'atendimento_detalhe' atendimento.pk %}">Voltar</a>
-        </div>
-    </form>
-</div>
-
-<template id="empty-form">
-    <tr>
-        <td>
-            {% for hidden in formset.empty_form.hidden_fields %}{{ hidden }}{% endfor %}
-            {{ formset.empty_form.lote }}
-        </td>
-        <td>{{ formset.empty_form.quantidade }}</td>
-        <td class="col-rem">{{ formset.empty_form.DELETE }}</td>
-    </tr>
-</template>
-
-<script>
-    (function () {
-        var total = document.getElementById("id_{{ formset.prefix }}-TOTAL_FORMS");
-        var corpo = document.getElementById("itens-body");
-        var modelo = document.getElementById("empty-form");
-
-        document.getElementById("add-item").addEventListener("click", function () {
-            var indice = parseInt(total.value, 10);
-            var html = modelo.innerHTML.replace(/__prefix__/g, indice);
-            corpo.insertAdjacentHTML("beforeend", html);
-            total.value = indice + 1;
-        });
-    })();
-</script>
-</body>
-</html>
+{% include "forms/atendimento.html" with salvar="Salvar alterações" %}
+{% endwith %}
+{% endblock %}

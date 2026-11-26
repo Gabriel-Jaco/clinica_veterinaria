@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="panel confirm">
+    <div class="confirm__head">
+        <span class="confirm__icon">{% block icon %}{% include "partials/icon.html" with n="trash-2" %}{% endblock %}</span>
+        <h1>{% block heading %}{% endblock %}</h1>
+        <p>{% block lead %}Essa ação não poderá ser desfeita.{% endblock %}</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="confirm__body">
+            {% block details %}{% endblock %}
+            <div class="note note--warning">{% include "partials/icon.html" with n="triangle-alert" %}<p>{% block warning %}{% endblock %}</p></div>
+        </div>
+        <div class="form-actions">
+            <a class="btn btn--secondary" href="{% block back_url %}{% endblock %}">{% include "partials/icon.html" with n="arrow-left" %}{% block back_text %}Voltar sem excluir{% endblock %}</a>
+            <button type="submit" class="btn btn--danger">{% block submit_icon %}{% include "partials/icon.html" with n="trash-2" %}{% endblock %}{% block submit_text %}{% endblock %}</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

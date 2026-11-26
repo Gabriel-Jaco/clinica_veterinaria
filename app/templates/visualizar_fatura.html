@@ -1,168 +1,135 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fatura #{{ fatura.pk }}</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #222; margin: 0; padding: 24px; }
-        .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-        h1 { margin: 0; font-size: 22px; }
-        h2 { font-size: 17px; margin: 28px 0 8px; }
-        .topo { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-        .btn { display: inline-block; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; text-decoration: none; font-size: 14px; cursor: pointer; }
-        .btn-sec { background: #6b7280; }
-        .btn-perigo { background: #dc2626; }
-        .btn-pequeno { padding: 4px 10px; font-size: 13px; }
-        .messages { list-style: none; padding: 0; margin: 0 0 16px; }
-        .messages li { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; background: #e0f2fe; }
-        .messages .success { background: #dcfce7; }
-        .messages .error { background: #fee2e2; }
-        .info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 24px; }
-        .info div span { display: block; font-size: 12px; color: #6b7280; text-transform: uppercase; }
-        .info div strong { font-size: 15px; }
-        .resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 20px; }
-        .resumo div { background: #f9fafb; border-radius: 6px; padding: 12px 16px; }
-        .resumo span { display: block; font-size: 12px; color: #6b7280; text-transform: uppercase; }
-        .resumo strong { font-size: 18px; }
-        .tabela-scroll { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; white-space: nowrap; }
-        th { background: #f9fafb; }
-        td.valor, th.valor { text-align: right; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background: #e5e7eb; }
-        .badge-pendente, .badge-estornado { background: #fee2e2; }
-        .badge-parcial { background: #fef3c7; }
-        .badge-pago { background: #dcfce7; }
-        .estornado td { color: #9ca3af; text-decoration: line-through; }
-        .estornado td.sem-risco { text-decoration: none; }
-        .form-pagamento { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; background: #f9fafb; border-radius: 6px; padding: 14px 16px; }
-        .form-pagamento .campo { flex: 1; min-width: 180px; }
-        .form-pagamento label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
-        .form-pagamento input, .form-pagamento select { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; font-family: inherit; }
-        .vazio { text-align: center; color: #6b7280; padding: 16px; }
-        .quitada { background: #dcfce7; border-radius: 6px; padding: 10px 14px; font-size: 14px; }
-        form.inline { display: inline; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="topo">
-        <h1>Fatura #{{ fatura.pk }}</h1>
-        <div>
-            <a class="btn btn-sec" href="{% url 'fatura' %}">Voltar</a>
-            {% if pode_excluir %}
-            <a class="btn btn-perigo" href="{% url 'fatura_excluir' fatura.pk %}">Excluir fatura</a>
+{% extends "base.html" %}
+
+{% block title %}Fatura #{{ fatura.pk }}{% endblock %}
+
+{% block content %}
+<header class="page-head">
+    <div class="page-head__text">
+        <a class="back" href="{% url 'fatura' %}">{% include "partials/icon.html" with n="arrow-left" %}Faturas</a>
+        <div class="page-head__title">
+            <h1>Fatura #{{ fatura.pk }}</h1>
+            {% include "partials/badge.html" with code=status_pagamento.value text=status_pagamento.label %}
+        </div>
+        <p>{{ fatura.cliente.nome }} {{ fatura.cliente.sobrenome }}, emitida em {{ fatura.data_emissao|date:"d/m/Y" }}</p>
+    </div>
+    <div class="page-actions">
+        {% if pode_excluir and perms.app.delete_fatura %}
+        <a class="btn btn--danger-outline" href="{% url 'fatura_excluir' fatura.pk %}">{% include "partials/icon.html" with n="trash-2" %}Excluir fatura</a>
+        {% endif %}
+    </div>
+</header>
+
+<div class="split">
+    <div>
+        <section class="panel">
+            <div class="panel__head"><h2>Atendimentos da fatura</h2></div>
+            <div class="table-wrap">
+                <table class="table table--stack">
+                    <thead>
+                        <tr><th>Animal</th><th>Serviço</th><th>Data</th><th class="num">Total</th><th class="col-actions"><span class="sr-only">Ações</span></th></tr>
+                    </thead>
+                    <tbody>
+                        {% for a in atendimentos %}
+                        <tr>
+                            <td class="cell-main"><strong>{{ a.animal.nome }}</strong></td>
+                            <td data-label="Serviço">{{ a.servico.nome }}</td>
+                            <td data-label="Data" class="nowrap">{{ a.data|date:"d/m/Y" }}</td>
+                            <td data-label="Total" class="num">R$&nbsp;{{ a.valor_total|floatformat:"2g" }}</td>
+                            <td class="col-actions">{% if perms.app.view_atendimento %}<a class="icon-btn" href="{% url 'atendimento_detalhe' a.pk %}" aria-label="Ver atendimento de {{ a.animal.nome }}" data-tip="Ver">{% include "partials/icon.html" with n="eye" %}<span class="icon-btn__text">Ver</span></a>{% endif %}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="cell-main muted">Nenhum atendimento nesta fatura.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel__head"><h2>Histórico de pagamentos</h2></div>
+            {% if pagamentos %}
+            <div class="table-wrap">
+                <table class="table table--stack">
+                    <thead>
+                        <tr><th>Data</th><th>Forma</th><th>Recebido por</th><th class="num">Valor</th><th class="col-actions"><span class="sr-only">Ações</span></th></tr>
+                    </thead>
+                    <tbody>
+                        {% for p in pagamentos %}
+                        <tr class="{% if p.estornado %}row--void{% endif %}">
+                            <td data-label="Data" class="nowrap">{{ p.data_pagamento|date:"d/m/Y H:i" }}</td>
+                            <td data-label="Forma">{{ p.get_forma_display }}</td>
+                            <td data-label="Recebido por">{{ p.funcionario.nome }}</td>
+                            <td data-label="Valor" class="num">R$&nbsp;{{ p.valor|floatformat:"2g" }}</td>
+                            <td class="col-actions">
+                                {% if p.estornado %}
+                                    {% include "partials/badge.html" with code="estornado" text="Estornado" %}
+                                {% elif perms.app.change_pagamento %}
+                                    <form method="post" action="{% url 'pagamento_estornar' p.pk %}" data-confirm="O pagamento de R$ {{ p.valor|floatformat:'2g' }} deixa de contar e o valor volta para o saldo da fatura." data-confirm-title="Estornar este pagamento?" data-confirm-action="Estornar pagamento">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn--danger-outline btn--small">{% include "partials/icon.html" with n="rotate-ccw" %}Estornar</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                {% include "partials/empty.html" with icon="wallet" title="Nenhum pagamento registrado" text="Os recebimentos desta fatura aparecem aqui." %}
+            {% endif %}
+        </section>
+    </div>
+
+    <aside class="split__aside panel" aria-label="Pagamento">
+        <div class="balance">
+            <p class="balance__label">Saldo a receber</p>
+            <p class="balance__value">R$&nbsp;{{ saldo|floatformat:"2g" }}</p>
+            <div class="progress" role="img" aria-label="{% widthratio total_pago fatura.valor_final 100 %}% pago">
+                <span style="width: {% widthratio total_pago fatura.valor_final 100 %}%"></span>
+            </div>
+            <dl class="balance__rows">
+                <div><dt>Valor da fatura</dt><dd>R$&nbsp;{{ fatura.valor_final|floatformat:"2g" }}</dd></div>
+                <div><dt>Total pago</dt><dd>R$&nbsp;{{ total_pago|floatformat:"2g" }}</dd></div>
+            </dl>
+        </div>
+
+        <div class="panel__body">
+            {% if saldo <= 0 %}
+                <div class="note note--success">{% include "partials/icon.html" with n="circle-check" %}<p>Esta fatura está quitada.</p></div>
+            {% elif perms.app.add_pagamento %}
+                <h2>Registrar pagamento</h2>
+                <form method="post" action="{% url 'pagamento_cadastro' fatura.pk %}">
+                    {% csrf_token %}
+                    {% include "partials/field.html" with field=form.valor icon="circle-dollar-sign" hint="Já vem com o saldo total. Altere para receber só uma parte." %}
+                    <div class="field" style="margin-top: 16px">
+                        <fieldset class="choices">
+                            <legend>{{ form.forma.label }}</legend>
+                            {% for valor, nome in form.forma.field.choices %}
+                            <div class="choice">
+                                <input type="radio" name="forma" id="forma-{{ valor }}" value="{{ valor }}" required {% if forloop.first %}checked{% endif %}>
+                                <label for="forma-{{ valor }}">{% if valor == "dinheiro" %}{% include "partials/icon.html" with n="banknote" %}{% elif valor == "pix" %}{% include "partials/icon.html" with n="qr-code" %}{% else %}{% include "partials/icon.html" with n="credit-card" %}{% endif %}{{ nome }}</label>
+                            </div>
+                            {% endfor %}
+                        </fieldset>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--block" style="margin-top: 18px">{% include "partials/icon.html" with n="check" %}Registrar pagamento</button>
+                </form>
+            {% else %}
+                <div class="note">{% include "partials/icon.html" with n="info" %}<p>Seu perfil não tem permissão para registrar pagamentos.</p></div>
             {% endif %}
         </div>
-    </div>
-
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    <div class="info">
-        <div><span>Cliente</span><strong>{{ fatura.cliente.nome }} {{ fatura.cliente.sobrenome }}</strong></div>
-        <div><span>Emissão</span><strong>{{ fatura.data_emissao|date:"d/m/Y" }}</strong></div>
-        <div>
-            <span>Situação</span>
-            <strong><span class="badge badge-{{ status_pagamento.value }}" style="display:inline-block;text-transform:none">{{ status_pagamento.label }}</span></strong>
-        </div>
-    </div>
-
-    <div class="resumo">
-        <div><span>Valor da fatura</span><strong>R$ {{ fatura.valor_final|floatformat:2 }}</strong></div>
-        <div><span>Total pago</span><strong>R$ {{ total_pago|floatformat:2 }}</strong></div>
-        <div><span>Saldo</span><strong>R$ {{ saldo|floatformat:2 }}</strong></div>
-    </div>
-
-    <h2>Atendimentos da fatura</h2>
-    <div class="tabela-scroll">
-        <table>
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Animal</th>
-                    <th>Serviço</th>
-                    <th class="valor">Total</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for a in atendimentos %}
-                <tr>
-                    <td>{{ a.data|date:"d/m/Y" }}</td>
-                    <td>{{ a.animal.nome }}</td>
-                    <td>{{ a.servico.nome }}</td>
-                    <td class="valor">R$ {{ a.valor_total|floatformat:2 }}</td>
-                    <td><a class="btn btn-pequeno" href="{% url 'atendimento_detalhe' a.pk %}">Ver</a></td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="5" class="vazio">Nenhum atendimento nesta fatura.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <h2>Registrar pagamento</h2>
-    {% if saldo > 0 %}
-    <form method="post" action="{% url 'pagamento_cadastro' fatura.pk %}" class="form-pagamento">
-        {% csrf_token %}
-        <div class="campo">
-            <label for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
-            {{ form.valor }}
-        </div>
-        <div class="campo">
-            <label for="{{ form.forma.id_for_label }}">{{ form.forma.label }}</label>
-            {{ form.forma }}
-        </div>
-        <button type="submit" class="btn">Registrar pagamento</button>
-    </form>
-    {% else %}
-    <div class="quitada">Esta fatura está quitada.</div>
-    {% endif %}
-
-    <h2>Histórico de pagamentos</h2>
-    <div class="tabela-scroll">
-        <table>
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Forma</th>
-                    <th>Recebido por</th>
-                    <th class="valor">Valor</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in pagamentos %}
-                <tr class="{% if p.estornado %}estornado{% endif %}">
-                    <td>{{ p.data_pagamento|date:"d/m/Y H:i" }}</td>
-                    <td>{{ p.get_forma_display }}</td>
-                    <td>{{ p.funcionario.nome }}</td>
-                    <td class="valor">R$ {{ p.valor|floatformat:2 }}</td>
-                    <td class="sem-risco">
-                        {% if p.estornado %}
-                        <span class="badge badge-estornado">Estornado</span>
-                        {% else %}
-                        <form method="post" action="{% url 'pagamento_estornar' p.pk %}" class="inline" onsubmit="return confirm('Estornar este pagamento de R$ {{ p.valor|floatformat:2 }}?');">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-pequeno btn-perigo">Estornar</button>
-                        </form>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="5" class="vazio">Nenhum pagamento registrado.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    </aside>
 </div>
-</body>
-</html>
+
+<dialog class="dialog" id="confirm-dialog">
+    <form method="dialog">
+        <h2 data-confirm-title></h2>
+        <p data-confirm-text></p>
+        <div class="dialog__actions">
+            <button class="btn btn--secondary" value="no">Voltar</button>
+            <button class="btn btn--danger" value="yes" data-confirm-yes></button>
+        </div>
+    </form>
+</dialog>
+{% endblock %}
